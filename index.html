@@ -2,22 +2,22 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>সিলেট টেসলা রাইড by Protein Boy</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>সিলেট টেসলা রাইড</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#101820;color:white;font-family:Arial,"Noto Sans Bengali",sans-serif;overflow:hidden}
-#gameWrap{position:relative;width:100%;height:100dvh;overflow:hidden;background:#8ed7ef}
-canvas{display:block;width:100%;height:100%;touch-action:none}
+#gameWrap{position:relative;width:100%;height:100dvh;overflow:hidden}
+canvas{width:100%;height:100%;display:block;touch-action:none}
 #hud{position:absolute;top:9px;left:9px;right:9px;display:flex;gap:6px;flex-wrap:wrap;pointer-events:none}
-.stat{background:#101820e8;padding:8px 10px;border-radius:10px;font-size:12px;font-weight:bold;box-shadow:0 2px 7px #0003}
-#chargeBox{width:100%;max-width:210px}
+.stat{background:#10232beb;padding:8px 10px;border-radius:9px;font-size:12px;font-weight:bold}
+#chargeBox{width:100%;max-width:220px}
 #chargeTrack{height:9px;background:#555;border-radius:10px;margin-top:5px;overflow:hidden}
-#chargeFill{height:100%;width:100%;background:#41e16f;transition:width .2s}
+#chargeFill{height:100%;width:100%;background:#41e16f}
 #musicBtn{position:absolute;top:112px;right:9px;background:#17252eee;color:white;border:1px solid #ffffff66;border-radius:10px;padding:10px;font-weight:bold}
 #hint{position:absolute;top:158px;right:9px;background:#17252ee8;padding:7px 9px;border-radius:9px;font-size:11px}
 #overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#07141dcc;padding:18px}
-.panel{width:min(390px,100%);background:#142b35;border:1px solid #ffffff38;border-radius:20px;padding:21px;text-align:center;box-shadow:0 12px 40px #0007}
+.panel{width:min(390px,100%);background:#142b35;border:1px solid #ffffff38;border-radius:20px;padding:21px;text-align:center}
 .panel h1{font-size:25px;margin:0 0 8px;color:#ffd54a}
 .panel p{color:#d5e4e9;line-height:1.55;font-size:14px}
 .mainBtn{border:0;border-radius:12px;background:#ffcc36;color:#17212a;font-size:17px;font-weight:900;padding:13px 22px;width:100%;margin-top:8px}
@@ -27,10 +27,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .ctrl.gas{background:#168548e8}
 .ctrl.brake{background:#bb3939e8}
 #toast{position:absolute;top:205px;left:50%;transform:translateX(-50%);background:#142b35ed;padding:10px 13px;border-radius:12px;font-weight:bold;display:none;text-align:center;max-width:90%;font-size:13px}
-@media(min-width:700px){
- #gameWrap{max-width:1000px;margin:auto;height:100dvh}
- .ctrl{width:70px;height:70px}
-}
+@media(min-width:700px){#gameWrap{max-width:1000px;margin:auto}.ctrl{width:70px;height:70px}}
 </style>
 </head>
 <body>
@@ -48,17 +45,17 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 </div>
 
 <button id="musicBtn">🎵 গান চালু</button>
-<div id="hint">চার্জ বাড়াতে protein সংগ্রহ করো!</div>
+<div id="hint">সামনে থেকে আসা প্রোটিম সংগ্রহ করো!</div>
 <div id="toast"></div>
 
 <div id="controls">
  <div class="controlGroup">
-  <button class="ctrl" id="left" aria-label="বামে">◀</button>
-  <button class="ctrl" id="right" aria-label="ডানে">▶</button>
+  <button class="ctrl" id="left">◀</button>
+  <button class="ctrl" id="right">▶</button>
  </div>
  <div class="controlGroup">
-  <button class="ctrl brake" id="brake" aria-label="ব্রেক">▼</button>
-  <button class="ctrl gas" id="go" aria-label="গতি বাড়াও">▲</button>
+  <button class="ctrl brake" id="brake">▼</button>
+  <button class="ctrl gas" id="go">▲</button>
  </div>
 </div>
 
@@ -67,10 +64,10 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <div style="font-size:46px">🛺</div>
   <h1 id="panelTitle">সিলেট টেসলা রাইড</h1>
   <p><b>চালক: Aiman-The protein boy</b></p>
-  <p id="panelMessage">সিলেটের রাস্তায় টেসলা চালাও। protein সংগ্রহ করে চার্জ বাড়াও!</p>
-  <p>◀ ▶ অটোরিকশা ঘোরাও<br>▲ গতি বাড়াও · ▼ ব্রেক করো</p>
+  <p id="panelMessage">সিলেটের রাস্তায় টেসলা চালাও। প্রোটিন সংগ্রহ করে চার্জ বাড়াও!</p>
+  <p>◀ ▶ ঘোরাও<br>▲ গতি বাড়াও · ▼ ব্রেক করো</p>
   <button class="mainBtn" id="start">যাত্রা শুরু</button>
-  <p style="font-size:11px">গান শুনতে যাত্রা শুরুর পর ‘গান চালু’ বোতামে চাপ দাও।</p>
+  <p style="font-size:11px">গান চালু না হলে যাত্রা শুরুর পর গান চালু বোতামে চাপ দাও।</p>
  </div>
 </div>
 
@@ -80,16 +77,25 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 </div>
 
 <script>
-(() => {
-const canvas=document.getElementById("game");
-const ctx=canvas.getContext("2d");
+(()=>{
 const $=id=>document.getElementById(id);
-
+const canvas=$("game"),ctx=canvas.getContext("2d");
 const bn=n=>String(Math.floor(n)).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
 
 let W=0,H=0,dpr=1;
+let running=false,charge=100,distance=0,world=0,speed=0,lane=0;
+let foods=[],nextSpawn=0,lastTime=0,toastTimer=0;
+
+const keys={left:false,right:false,go:false,brake:false};
+const foodTypes=[
+ {emoji:"🐟",name:"মাছ",power:18},
+ {emoji:"🍗",name:"মাংস",power:22},
+ {emoji:"🥛",name:"দুধ",power:15},
+ {emoji:"🥚",name:"ডিম",power:12}
+];
+
 function resize(){
- dpr=Math.min(window.devicePixelRatio||1,2);
+ dpr=Math.min(devicePixelRatio||1,2);
  W=canvas.clientWidth;H=canvas.clientHeight;
  canvas.width=Math.round(W*dpr);
  canvas.height=Math.round(H*dpr);
@@ -98,19 +104,8 @@ function resize(){
 }
 window.addEventListener("resize",resize);
 
-let running=false,charge=100,distance=0,world=0,speed=0;
-let lane=0,foods=[],nextSpawn=0,lastTime=0,toastTimer=0;
-const keys={left:false,right:false,go:false,brake:false};
-
-const foodTypes=[
- {emoji:"🐟",name:"মাছ",power:18},
- {emoji:"🍗",name:"মাংস",power:22},
- {emoji:"🥚",name:"ডিম",power:12},
- {emoji:"🥛",name:"দুধ",power:15}
-];
-
-function toast(message){
- $("toast").textContent=message;
+function toast(t){
+ $("toast").textContent=t;
  $("toast").style.display="block";
  toastTimer=1.8;
 }
@@ -119,20 +114,45 @@ function updateHud(){
  $("speed").textContent=bn(speed);
  $("chargeText").textContent=bn(charge);
  $("chargeFill").style.width=charge+"%";
- $("chargeFill").style.background=charge<=20?"#ff4c4c":charge<=60?"#ffc83d":"#41e16f";
+ $("chargeFill").style.background=charge<=20?"#ff4444":charge<=40?"#ffc83d":"#41e16f";
 }
 function resetGame(){
  charge=100;distance=0;world=0;speed=0;lane=0;
  foods=[];nextSpawn=0;toastTimer=0;
  Object.keys(keys).forEach(k=>keys[k]=false);
  $("toast").style.display="none";
+ $("panelTitle").textContent="সিলেট অটোরিকশা রাইড";
+ $("panelMessage").textContent="সিলেটের রাস্তায় অটোরিকশা চালাও। মাছ, মাংস, ডিম ও দুধ সংগ্রহ করে চার্জ বাড়াও!";
+ $("start").textContent="যাত্রা শুরু";
  updateHud();
 }
+
+const music=$("bgMusic"),musicBtn=$("musicBtn");
+music.volume=.4;
+
+async function startMusic(){
+ try{
+  await music.play();
+  musicBtn.textContent="🔊 গান বন্ধ";
+ }catch(e){
+  musicBtn.textContent="🎵 গান চালু";
+  toast("গান চালাতে একবার গান চালু বোতামে চাপ দাও।");
+ }
+}
+musicBtn.addEventListener("click",async()=>{
+ if(music.paused)await startMusic();
+ else{
+  music.pause();
+  musicBtn.textContent="🎵 গান চালু";
+ }
+});
+
 function startGame(){
  resetGame();
  running=true;
  $("overlay").style.display="none";
  lastTime=performance.now();
+ startMusic();
  requestAnimationFrame(loop);
 }
 $("start").addEventListener("click",startGame);
@@ -141,7 +161,7 @@ function endGame(){
  running=false;
  $("panelTitle").textContent="যাত্রা শেষ!";
  $("panelMessage").textContent=
-  "তুমি "+bn(distance)+" মিটার পথ পাড়ি দিয়েছ। আবার যাত্রা শুরু করো এবং খাবার সংগ্রহ করে চার্জ বাড়াও!";
+  "তুমি "+bn(distance)+" মিটার পথ পাড়ি দিয়েছ। আবার চেষ্টা করো!";
  $("start").textContent="আবার যাত্রা শুরু";
  $("overlay").style.display="flex";
 }
@@ -149,7 +169,7 @@ function endGame(){
 function bindHold(id,key){
  const el=$(id);
  const down=e=>{e.preventDefault();keys[key]=true;};
- const up=e=>{e.preventDefault();keys[key]=false;};
+ const up=()=>{keys[key]=false;};
  el.addEventListener("pointerdown",down);
  el.addEventListener("pointerup",up);
  el.addEventListener("pointercancel",up);
@@ -174,141 +194,138 @@ window.addEventListener("keyup",e=>{
  if(e.key==="ArrowUp"||e.key.toLowerCase()==="w")keys.go=false;
  if(e.key==="ArrowDown"||e.key.toLowerCase()==="s")keys.brake=false;
 });
-window.addEventListener("blur",()=>{
- Object.keys(keys).forEach(k=>keys[k]=false);
-});
+window.addEventListener("blur",()=>Object.keys(keys).forEach(k=>keys[k]=false));
 
-const music=$("bgMusic");
-const musicBtn=$("musicBtn");
-music.volume=.4;
-
-musicBtn.addEventListener("click",async()=>{
- if(music.paused){
-  try{
-   await music.play();
-   musicBtn.textContent="🔊 গান বন্ধ";
-  }catch(e){
-   toast("গান চালু হয়নি। music.mp3 ফাইলটি পরীক্ষা করো।");
-  }
- }else{
-  music.pause();
-  musicBtn.textContent="🎵 গান চালু";
- }
-});
-
-function roundedRect(x,y,w,h,r,color){
- ctx.fillStyle=color;
- ctx.beginPath();
- ctx.roundRect(x,y,w,h,r);
- ctx.fill();
+function rr(x,y,w,h,r,color){
+ ctx.fillStyle=color;ctx.beginPath();
+ ctx.roundRect(x,y,w,h,r);ctx.fill();
 }
-function polygon(points,color){
- ctx.fillStyle=color;
- ctx.beginPath();
+function poly(points,color){
+ ctx.fillStyle=color;ctx.beginPath();
  ctx.moveTo(points[0][0],points[0][1]);
  for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);
  ctx.closePath();ctx.fill();
 }
-function drawTree(x,y,s){
- ctx.fillStyle="#754b2a";
- ctx.fillRect(x-s*.09,y-s*.08,s*.18,s*.5);
- ctx.fillStyle="#26783c";
- ctx.beginPath();ctx.arc(x,y-s*.22,s*.32,0,Math.PI*2);ctx.fill();
- ctx.fillStyle="#39964d";
- ctx.beginPath();ctx.arc(x-s*.15,y-s*.34,s*.21,0,Math.PI*2);ctx.fill();
+function tree(x,y,s){
+ ctx.fillStyle="#754b2a";ctx.fillRect(x-s*.08,y-s*.1,s*.16,s*.5);
+ ctx.fillStyle="#26783c";ctx.beginPath();ctx.arc(x,y-s*.25,s*.33,0,7);ctx.fill();
+ ctx.fillStyle="#39964d";ctx.beginPath();ctx.arc(x-s*.15,y-s*.35,s*.2,0,7);ctx.fill();
 }
-function drawBuilding(x,y,w,h,color){
+function building(x,y,w,h,color){
  ctx.fillStyle=color;ctx.fillRect(x,y,w,h);
  ctx.fillStyle="#dceaf0";
- for(let yy=y+8;yy<y+h-5;yy+=16){
+ for(let yy=y+8;yy<y+h-5;yy+=16)
   for(let xx=x+5;xx<x+w-5;xx+=13)ctx.fillRect(xx,yy,6,8);
- }
  ctx.fillStyle="#eee0c2";ctx.fillRect(x-2,y,w+4,4);
 }
 function drawRoad(){
- const horizon=H*.39, bottom=H+20, center=W*.5;
+ const horizon=H*.39,bottom=H+20,center=W*.5;
  const roadTop=W*.10,roadBottom=W*.94;
  const sky=ctx.createLinearGradient(0,0,0,horizon);
  sky.addColorStop(0,"#65c4ed");sky.addColorStop(1,"#d8f4fb");
  ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
- polygon([[0,horizon],[W*.16,H*.27],[W*.31,horizon],[W*.48,H*.25],[W*.66,horizon],[W*.85,H*.28],[W,horizon]],"#78bd8a");
- ctx.fillStyle="#ffe69a";ctx.beginPath();ctx.arc(W*.82,H*.12,23,0,Math.PI*2);ctx.fill();
+ poly([[0,horizon],[W*.16,H*.27],[W*.31,horizon],[W*.48,H*.25],[W*.66,horizon],[W*.85,H*.28],[W,horizon]],"#78bd8a");
+ ctx.fillStyle="#ffe69a";ctx.beginPath();ctx.arc(W*.82,H*.12,23,0,7);ctx.fill();
 
  for(let i=0;i<12;i++){
   const x=i*W/10-W*.03,hh=20+(i*17%35);
-  drawBuilding(x,horizon-hh,W*.075,hh,["#e7bfa0","#d8d4b8","#d9e3e2","#d8b7a4"][i%4]);
+  building(x,horizon-hh,W*.075,hh,["#e7bfa0","#d8d4b8","#d9e3e2","#d8b7a4"][i%4]);
  }
  ctx.fillStyle="#62b85b";ctx.fillRect(0,horizon,W,H-horizon);
- polygon([[center-roadTop/2,horizon],[center+roadTop/2,horizon],[center+roadBottom/2,bottom],[center-roadBottom/2,bottom]],"#55595b");
- polygon([[center-roadTop/2,horizon],[center-roadTop/2+3,horizon],[center-roadBottom/2+8,bottom],[center-roadBottom/2,bottom]],"#e9e4d4");
- polygon([[center+roadTop/2-3,horizon],[center+roadTop/2,horizon],[center+roadBottom/2,bottom],[center+roadBottom/2-8,bottom]],"#e9e4d4");
+ poly([[center-roadTop/2,horizon],[center+roadTop/2,horizon],[center+roadBottom/2,bottom],[center-roadBottom/2,bottom]],"#55595b");
+ poly([[center-roadTop/2,horizon],[center-roadTop/2+3,horizon],[center-roadBottom/2+8,bottom],[center-roadBottom/2,bottom]],"#e9e4d4");
+ poly([[center+roadTop/2-3,horizon],[center+roadTop/2,horizon],[center+roadBottom/2,bottom],[center+roadBottom/2-8,bottom]],"#e9e4d4");
 
  const phase=(world*.055)%1;
  for(let i=0;i<12;i++){
-  let p=(i/12+phase/12)%1;
-  let y=horizon+p*p*(H-horizon);
-  let roadW=roadTop+(roadBottom-roadTop)*p*p;
-  let dashH=5+25*p*p;
+  let p=(i/12+phase/12)%1,y=horizon+p*p*(H-horizon);
+  let rw=roadTop+(roadBottom-roadTop)*p*p,dh=5+25*p*p;
   ctx.fillStyle="#f9f1ce";
-  ctx.fillRect(center-roadW*.17,y,Math.max(2,W*.006),dashH);
-  ctx.fillRect(center+roadW*.17,y,Math.max(2,W*.006),dashH);
+  ctx.fillRect(center-rw*.17,y,Math.max(2,W*.006),dh);
+  ctx.fillRect(center+rw*.17,y,Math.max(2,W*.006),dh);
  }
- for(let side of [-1,1]){
+ for(const side of [-1,1]){
   for(let i=0;i<7;i++){
-   let p=((i/7+(world*.0007)%1)%1);
-   let y=horizon+p*p*(H-horizon);
-   let roadW=roadTop+(roadBottom-roadTop)*p*p;
-   let x=center+side*(roadW*.5+W*.04+p*W*.11);
-   let s=10+p*38;
+   const p=((i/7+(world*.0007)%1)%1);
+   const y=horizon+p*p*(H-horizon);
+   const rw=roadTop+(roadBottom-roadTop)*p*p;
+   const x=center+side*(rw*.5+W*.04+p*W*.11),s=10+p*38;
    if(i%3===0){
-    roundedRect(x-s*.55,y-s*.55,s*1.1,s*.8,2,"#e9d7b4");
-    ctx.fillStyle="#34734a";
-    ctx.font=`bold ${Math.max(5,s*.19)}px Arial`;
+    rr(x-s*.55,y-s*.55,s*1.1,s*.8,2,"#e9d7b4");
+    ctx.fillStyle="#34734a";ctx.font=`bold ${Math.max(5,s*.19)}px Arial`;
     ctx.textAlign="center";ctx.fillText("সিলেট",x,y-s*.2);
-   }else drawTree(x,y,s);
+   }else tree(x,y,s);
   }
  }
  return {horizon,center,roadTop,roadBottom};
 }
 
+/* তিন চাকার বাংলাদেশি যাত্রীবাহী অটোরিকশা */
 function drawAuto(x,y,scale){
  ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
- ctx.fillStyle="#0004";ctx.beginPath();ctx.ellipse(0,5,45,10,0,0,Math.PI*2);ctx.fill();
- roundedRect(-36,-5,13,23,4,"#17191a");
- roundedRect(23,-5,13,23,4,"#17191a");
- polygon([[-39,-17],[36,-17],[42,8],[-43,8]],"#148c50");
- polygon([[-31,-25],[29,-25],[37,-8],[-38,-8]],"#ffc83d");
- polygon([[-25,-48],[23,-48],[30,-25],[-30,-25]],"#2d6276");
- ctx.fillStyle="#d8f5ff";ctx.fillRect(-20,-44,18,14);ctx.fillRect(2,-44,17,14);
- roundedRect(-29,-55,57,7,3,"#16894b");
- ctx.fillStyle="#ffe17a";ctx.fillRect(-28,-52,55,3);
- ctx.fillStyle="#efb58a";ctx.beginPath();ctx.arc(0,-37,7,0,Math.PI*2);ctx.fill();
- ctx.fillStyle="#25313a";ctx.fillRect(-7,-31,14,8);
- ctx.fillStyle="#d8d8d8";ctx.fillRect(-38,5,76,4);
- ctx.fillStyle="#fff3b0";ctx.fillRect(-34,-15,8,6);ctx.fillRect(26,-15,8,6);
- ctx.fillStyle="white";ctx.font="bold 8px Arial";ctx.textAlign="center";
- ctx.fillText("AIMAN",0,-1);
+
+ // ছায়া ও পেছনের চাকা
+ ctx.fillStyle="#0004";ctx.beginPath();ctx.ellipse(0,5,49,11,0,0,7);ctx.fill();
+ rr(-37,-3,14,23,5,"#181818");
+ rr(24,-3,14,23,5,"#181818");
+
+ // অটোরিকশার খোলা সবুজ বডি
+ poly([[-43,-25],[34,-25],[43,5],[-45,5]],"#148c50");
+ poly([[-37,-18],[32,-18],[35,-7],[-39,-7]],"#f3c83f");
+
+ // পেছনের যাত্রী বসার অংশ ও ছাউনি
+ poly([[-31,-51],[24,-51],[33,-25],[-35,-25]],"#216e4a");
+ rr(-34,-59,69,9,3,"#f5cf37");
+ rr(-30,-56,60,4,2,"#e4f1e9");
+
+ // খোলা পাশের রেলিং
+ ctx.strokeStyle="#f5d24c";ctx.lineWidth=3;
+ ctx.beginPath();ctx.moveTo(-32,-45);ctx.lineTo(-32,-25);
+ ctx.moveTo(29,-45);ctx.lineTo(29,-25);
+ ctx.moveTo(-32,-32);ctx.lineTo(30,-32);ctx.stroke();
+
+ // চালকের সামনের কেবিন ও কাচ
+ poly([[-25,-46],[15,-46],[25,-24],[-31,-24]],"#285d72");
+ poly([[-20,-42],[-1,-42],[-1,-27],[-25,-27]],"#b8e8f5");
+ poly([[3,-42],[12,-42],[20,-27],[3,-27]],"#b8e8f5");
+
+ // চালক
+ ctx.fillStyle="#d9a17b";ctx.beginPath();ctx.arc(0,-36,6,0,7);ctx.fill();
+ ctx.fillStyle="#25313a";ctx.fillRect(-6,-30,12,6);
+
+ // সামনে একটি চাকা
+ ctx.save();ctx.translate(0,7);
+ rr(-9,-5,18,18,6,"#171717");
+ rr(-4,0,8,7,3,"#aaaaaa");
+ ctx.restore();
+
+ // সামনের হেডলাইট ও বাম্পার
+ ctx.fillStyle="#fff0a8";ctx.fillRect(-34,-16,8,6);ctx.fillRect(27,-16,8,6);
+ ctx.fillStyle="#d5d5d5";ctx.fillRect(-40,5,80,4);
+
+ // চালকের নাম
+ ctx.fillStyle="white";ctx.font="bold 7px Arial";ctx.textAlign="center";
+ ctx.fillText("AIMAN",0,-9);
  ctx.restore();
 }
 
 function projectFood(f,road){
- const ahead=f.z-world;
- const p=1-ahead/1050;
+ const ahead=f.z-world,p=1-ahead/1050;
  if(p<0||p>1.1)return null;
  const y=road.horizon+p*p*(H-road.horizon);
- const roadW=road.roadTop+(road.roadBottom-road.roadTop)*p*p;
- const x=road.center+f.lane*roadW*.38;
+ const rw=road.roadTop+(road.roadBottom-road.roadTop)*p*p;
+ const x=road.center+f.lane*rw*.38;
  return {x,y,size:12+p*35};
 }
 function drawFood(f,road){
- const q=projectFood(f,road);
- if(!q)return;
+ const q=projectFood(f,road);if(!q)return;
  ctx.save();ctx.textAlign="center";ctx.textBaseline="middle";
  ctx.font=`${q.size}px Arial`;ctx.shadowColor="#0007";ctx.shadowBlur=5;
  ctx.fillText(f.emoji,q.x,q.y);ctx.restore();
 }
 
 function update(dt){
+ // আগের তুলনায় চার্জ দ্রুত কমবে
  if(keys.go)speed+=45*dt;
  else speed-=12*dt;
  if(keys.brake)speed-=65*dt;
@@ -320,13 +337,20 @@ function update(dt){
 
  world+=speed*dt*1.8;
  distance+=speed*dt*.55;
- charge=Math.max(0,charge-speed*dt*.013);
 
- // চার্জ ৬০% বা তার নিচে হলেই খাবার আসবে।
- if(charge<=60&&foods.length<2&&world>=nextSpawn){
+ // চলার সময় চার্জ দ্রুত কমে; স্থির থাকলে কমবে না
+ charge=Math.max(0,charge-speed*dt*.045);
+
+ // সব সময় এলোমেলো খাবার সামনে আসবে
+ // একই সময়ে সর্বোচ্চ তিনটি খাবার থাকবে
+ if(foods.length<3&&world>=nextSpawn){
   const f=foodTypes[Math.floor(Math.random()*foodTypes.length)];
-  foods.push({...f,z:world+1050,lane:Math.random()*.95-.475});
-  nextSpawn=world+550+Math.random()*350;
+  foods.push({
+   ...f,
+   z:world+1050+Math.random()*180,
+   lane:Math.random()*.95-.475
+  });
+  nextSpawn=world+280+Math.random()*380;
  }
 
  const road={horizon:H*.39,center:W*.5,roadTop:W*.10,roadBottom:W*.94};
@@ -336,7 +360,9 @@ function update(dt){
  foods=foods.filter(f=>{
   const q=projectFood(f,road);
   if(!q)return f.z>world-100;
-  if(q.y>carY-35&&q.y<carY+25&&Math.abs(q.x-carX)<40*scale+q.size*.35){
+
+  if(q.y>carY-35&&q.y<carY+25&&
+     Math.abs(q.x-carX)<43*scale+q.size*.35){
    charge=Math.min(100,charge+f.power);
    toast(f.name+" সংগ্রহ হয়েছে! চার্জ +"+bn(f.power)+"%");
    return false;
@@ -352,12 +378,12 @@ function draw(){
  if(!W||!H)return;
  const road=drawRoad();
  [...foods].sort((a,b)=>b.z-a.z).forEach(f=>drawFood(f,road));
- const carX=road.center+lane*W*.30;
- drawAuto(carX,H*.83,Math.max(.75,Math.min(1.45,H/650)));
+ const x=road.center+lane*W*.30;
+ drawAuto(x,H*.83,Math.max(.75,Math.min(1.45,H/650)));
  ctx.textAlign="center";ctx.font="bold 12px Arial";
- ctx.fillStyle="#fff";ctx.strokeStyle="#16252c";ctx.lineWidth=3;
- ctx.strokeText("Aiman-The protein boy",carX,H*.83+45);
- ctx.fillText("Aiman-The protein boy",carX,H*.83+45);
+ ctx.fillStyle="white";ctx.strokeStyle="#16252c";ctx.lineWidth=3;
+ ctx.strokeText("Aiman-The protein boy",x,H*.83+45);
+ ctx.fillText("Aiman-The protein boy",x,H*.83+45);
 }
 
 function loop(now){
@@ -380,4 +406,4 @@ draw();
 })();
 </script>
 </body>
-  </html>
+</html>
