@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>সিলেট টেসলা রাইড</title>
+ <title>প্রোটিন খাও,টেসলা চালাও</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#101820;color:white;font-family:Arial,"Noto Sans Bengali",sans-serif;overflow:hidden}
@@ -42,7 +43,9 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 <canvas id="game"></canvas>
 
 <div id="hud">
- <div class="stat">🛺 সিলেট টেসলা রাইড</div>
+ <div class="stat">🛺 সিলেট টেসলা রাইড <br>
+  প্রোটিন খাও,টেসলা চালাও
+ </div>
  <div class="stat">📏 দূরত্ব: <span id="distance">০</span> মিটার</div>
  <div class="stat">⚡ গতি: <span id="speed">০</span> কিমি/ঘণ্টা</div>
  <div class="stat">💥 ধাক্কা: <span id="hits">০</span>/৩</div>
@@ -57,7 +60,7 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 </div>
 
 <button id="musicBtn">🎵 গান চালু</button>
-<div id="hint">খাবার সংগ্রহ করো, গাড়ি এড়িয়ে চলো!</div>
+<div id="hint">প্রোটিন খাও,টেসলা চালাও!</div>
 <div id="toast"></div>
 
 <div id="controls">
@@ -77,7 +80,7 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
   <div style="font-size:46px">🛺</div>
   <h1 id="panelTitle">সিলেট টেসলা রাইড</h1>
   <p><b>সিলেটের রাস্তায় আপনার যাত্রা শুরু হোক!</b></p>
-  <p id="panelMessage">খাবার সংগ্রহ করে চার্জ বাড়াও এবং অন্য গাড়ি এড়িয়ে চলো।</p>
+  <p id="panelMessage">প্রোটিন সংগ্রহ করে চার্জ বাড়াও এবং অন্য গাড়ি এড়িয়ে চলো।</p>
   <p>◀ ▶ দিক পরিবর্তন<br>▲ স্বাভাবিক গতি · খাড়া টান: দ্রুত গতি<br>▼ ব্রেক করো<br>খাড়া টান ৫ সেকেন্ড চলে, এরপর ৫ সেকেন্ডে রিফিল হয়।<br>৩ বার ধাক্কা লাগলে গেম ওভার!</p>
   <button class="mainBtn" id="start">যাত্রা শুরু</button>
   <p style="font-size:11px">গান চালু না হলে গান চালু বোতামে চাপ দাও।</p>
@@ -104,7 +107,7 @@ let boostRemaining=5,boostCooldown=0;
 const keys={left:false,right:false,go:false,fast:false,brake:false};
 
 const foodTypes=[
- {emoji:"🐟",name:"কাশেম মামার আফ্রিকান মাগুর",short:"আফ্রিকান মাগুর",power:18},
+ {emoji:"🐟",name:"কাশেম মামার আফ্রিকান মাগুর",short:"কাশেম মামার আফ্রিকান মাগুর",power:18},
  {emoji:"🍗",name:"আপেল মামার মুরগী",short:"আপেল মামার মুরগী",power:22},
  {emoji:"🥛",name:"আড়ং UHT Milk",short:"আড়ং UHT Milk",power:15},
  {emoji:"🥚",name:"আপেল মামার ডিম",short:"আপেল মামার ডিম",power:12}
@@ -158,7 +161,7 @@ function resetGame(){
  Object.keys(keys).forEach(k=>keys[k]=false);
  $("toast").style.display="none";
  $("panelTitle").textContent="সিলেট টেসলা রাইড";
- $("panelMessage").textContent="খাবার সংগ্রহ করো, গাড়ি এড়িয়ে চলো। ৩ বার ধাক্কা লাগলে গেম ওভার!";
+ $("panelMessage").textContent="প্রোটিন সংগ্রহ করো, গাড়ি এড়িয়ে চলো। ৩ বার ধাক্কা লাগলে গেম ওভার!";
  $("start").textContent="যাত্রা শুরু";
  updateHud();
 }
