@@ -1,41 +1,36 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>সিলেট টেসলা রাইড</title>
- <title>প্রোটিন খাও,টেসলা চালাও</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#101820;color:white;font-family:Arial,"Noto Sans Bengali",sans-serif;overflow:hidden}
-#gameWrap{position:relative;width:100%;height:100dvh;overflow:hidden}
-canvas{width:100%;height:100%;display:block;touch-action:none}
-#hud{position:absolute;top:8px;left:8px;right:8px;display:flex;gap:5px;flex-wrap:wrap;pointer-events:none}
-.stat{background:#10232beb;padding:7px 9px;border-radius:9px;font-size:12px;font-weight:bold}
-#chargeBox{width:100%;max-width:220px}
-#chargeTrack,#boostTrack{height:8px;background:#555;border-radius:10px;margin-top:5px;overflow:hidden}
-#chargeFill{height:100%;width:100%;background:#41e16f}
-#boostFill{height:100%;width:100%;background:#ff8c36}
-#musicBtn{position:absolute;top:155px;right:8px;background:#17252eee;color:white;border:1px solid #ffffff66;border-radius:10px;padding:9px;font-weight:bold}
-#hint{position:absolute;top:198px;right:8px;background:#17252ee8;padding:7px 9px;border-radius:9px;font-size:11px}
-#overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#07141dcc;padding:18px;z-index:5}
-.panel{width:min(390px,100%);background:#142b35;border:1px solid #ffffff38;border-radius:20px;padding:20px;text-align:center}
-.panel h1{font-size:24px;margin:0 0 8px;color:#ffd54a}
-.panel p{color:#d5e4e9;line-height:1.5;font-size:14px}
-.mainBtn{border:0;border-radius:12px;background:#ffcc36;color:#17212a;font-size:17px;font-weight:900;padding:13px 22px;width:100%;margin-top:8px}
-#controls{position:absolute;bottom:16px;left:0;right:0;display:flex;justify-content:space-between;align-items:end;padding:0 10px;pointer-events:none}
-.controlGroup{display:flex;gap:7px;pointer-events:auto;align-items:center}
-.ctrl{min-width:49px;height:55px;border-radius:50%;border:2px solid #ffffff9c;background:#122832dd;color:white;font-size:21px;font-weight:bold;touch-action:none;user-select:none}
-.ctrl.gas{background:#168548e8}
-.ctrl.brake{background:#bb3939e8}
-.ctrl.fast{background:#b3261e;font-size:12px;width:73px;height:57px;border-radius:14px}
-.ctrl:active{filter:brightness(1.3)}
-#toast{position:absolute;top:245px;left:50%;transform:translateX(-50%);background:#142b35ed;padding:10px 13px;border-radius:12px;font-weight:bold;display:none;text-align:center;max-width:92%;font-size:13px;z-index:4}
-@media(min-width:700px){
- #gameWrap{max-width:1000px;margin:auto}
- .ctrl{width:65px;height:65px}
- .ctrl.fast{width:95px;height:65px}
-}
+body{margin:0;background:#101820;color:white;font-family:Arial,"Noto Sans Bengali",sans-serif;overflow:hidden;touch-action:none}
+#gameWrap{position:relative;width:100vw;height:100dvh;max-width:600px;margin:auto;background:#39874b;overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+#hud{position:absolute;top:8px;left:8px;right:8px;display:flex;gap:6px;flex-wrap:wrap;z-index:2;pointer-events:none}
+.panel{background:#101820dc;padding:7px 10px;border-radius:10px;font-size:13px;font-weight:bold}
+#chargeOuter{width:90px;height:10px;background:#555;border-radius:8px;display:inline-block;overflow:hidden;vertical-align:middle}
+#chargeBar{height:100%;width:100%;background:#35e879;transition:width .1s}
+#turboOuter{width:80px;height:7px;background:#555;border-radius:8px;overflow:hidden;margin-top:4px}
+#turboBar{height:100%;width:100%;background:#ffc928}
+#buttons{position:absolute;bottom:15px;left:0;right:0;display:flex;justify-content:space-between;align-items:end;padding:0 13px;z-index:3}
+.group{display:flex;gap:8px;align-items:end}
+.ctrl{width:60px;height:60px;border:2px solid #ffffff70;border-radius:18px;background:#17212de8;color:white;font-size:25px;font-weight:bold;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none;touch-action:none}
+.ctrl:active{background:#3679ad}
+.ctrl.small{width:54px;height:54px;font-size:16px}
+#turboBtn{width:76px;height:62px;background:#b95112;font-size:13px;line-height:1.25}
+#turboBtn.ready{background:#dc6417}
+#turboBtn.cool{background:#444}
+#overlay{position:absolute;inset:0;background:#07111be8;display:flex;align-items:center;justify-content:center;z-index:5;padding:22px}
+#dialog{width:100%;max-width:360px;background:#172735;border:1px solid #ffffff35;border-radius:22px;padding:24px 18px;text-align:center;box-shadow:0 10px 35px #0008}
+#dialog h1{margin:0 0 12px;font-size:27px}
+#dialog p{line-height:1.7;margin:8px 0 18px}
+.mainBtn{border:0;border-radius:12px;padding:13px 20px;background:#20a568;color:white;font-size:17px;font-weight:bold;width:100%;margin-top:8px}
+#musicBtn{position:absolute;right:10px;top:68px;z-index:3;border:0;border-radius:10px;padding:8px;background:#101820d9;color:white}
+.note{font-size:12px;color:#d4e4ee}
 </style>
 </head>
 <body>
@@ -43,525 +38,569 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 <canvas id="game"></canvas>
 
 <div id="hud">
- <div class="stat">🛺 সিলেট টেসলা রাইড <br>
-  প্রোটিন খাও,টেসলা চালাও
- </div>
- <div class="stat">📏 দূরত্ব: <span id="distance">০</span> মিটার</div>
- <div class="stat">⚡ গতি: <span id="speed">০</span> কিমি/ঘণ্টা</div>
- <div class="stat">💥 ধাক্কা: <span id="hits">০</span>/৩</div>
- <div class="stat" id="chargeBox">
-  🔋 চার্জ: <span id="chargeText">১০০</span>%
-  <div id="chargeTrack"><div id="chargeFill"></div></div>
- </div>
- <div class="stat" style="width:155px">
-  🔥 খাড়া টান: <span id="boostText">৫</span> সেকেন্ড
-  <div id="boostTrack"><div id="boostFill"></div></div>
- </div>
+  <div class="panel">স্কোর: <span id="score">০</span></div>
+  <div class="panel">গতি: <span id="speed">০</span></div>
+  <div class="panel">চার্জ: <span id="chargeOuter"><span id="chargeBar"></span></span></div>
+  <div class="panel">ধাক্কা: <span id="hits">০</span>/৩</div>
+  <div class="panel" style="min-width:115px">
+    <span id="turboText">খাড়া টান: প্রস্তুত</span>
+    <div id="turboOuter"><div id="turboBar"></div></div>
+  </div>
 </div>
 
-<button id="musicBtn">🎵 গান চালু</button>
-<div id="hint">প্রোটিন খাও,টেসলা চালাও!</div>
-<div id="toast"></div>
+<button id="musicBtn">🔊 গান</button>
 
-<div id="controls">
- <div class="controlGroup">
-  <button class="ctrl" id="left">◀</button>
-  <button class="ctrl" id="right">▶</button>
- </div>
- <div class="controlGroup">
-  <button class="ctrl brake" id="brake">▼</button>
-  <button class="ctrl gas" id="go">▲</button>
-  <button class="ctrl fast" id="fast">খাড়া টান</button>
- </div>
+<div id="buttons">
+  <div class="group">
+    <button class="ctrl" id="leftBtn">◀</button>
+    <button class="ctrl" id="rightBtn">▶</button>
+  </div>
+  <div class="group">
+    <button class="ctrl small" id="brakeBtn">ব্রেক</button>
+    <button class="ctrl" id="accelBtn">▲</button>
+    <button class="ctrl" id="turboBtn">⚡<br>খাড়া টান</button>
+  </div>
 </div>
 
 <div id="overlay">
- <div class="panel">
-  <div style="font-size:46px">🛺</div>
-  <h1 id="panelTitle">সিলেট টেসলা রাইড</h1>
-  <p><b>সিলেটের রাস্তায় আপনার যাত্রা শুরু হোক!</b></p>
-  <p id="panelMessage">প্রোটিন সংগ্রহ করে চার্জ বাড়াও এবং অন্য গাড়ি এড়িয়ে চলো।</p>
-  <p>◀ ▶ দিক পরিবর্তন<br>▲ স্বাভাবিক গতি · খাড়া টান: দ্রুত গতি<br>▼ ব্রেক করো<br>খাড়া টান ৫ সেকেন্ড চলে, এরপর ৫ সেকেন্ডে রিফিল হয়।<br>৩ বার ধাক্কা লাগলে গেম ওভার!</p>
-  <button class="mainBtn" id="start">যাত্রা শুরু</button>
-  <p style="font-size:11px">গান চালু না হলে গান চালু বোতামে চাপ দাও।</p>
- </div>
+  <div id="dialog">
+    <h1>🛺 সিলেট টেসলা রাইড</h1>
+    <p>সাবধানে গাড়ি চালাও, রাস্তার খাবার সংগ্রহ করো এবং চার্জ ধরে রাখো!</p>
+    <p class="note">খাড়া টান: ৫ সেকেন্ড ব্যবহার + ৫ সেকেন্ড রিফিল</p>
+    <button class="mainBtn" id="startBtn">গেম শুরু করো</button>
+  </div>
 </div>
 
-<audio id="bgMusic" loop preload="auto">
- <source src="./music.mp3" type="audio/mpeg">
-</audio>
+<audio id="music" src="music.mp3" loop preload="auto"></audio>
 </div>
 
 <script>
-(()=>{
-const $=id=>document.getElementById(id);
-const canvas=$("game"),ctx=canvas.getContext("2d");
-const bn=n=>String(Math.floor(n)).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+(() => {
+"use strict";
+
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const $ = id => document.getElementById(id);
 
 let W=0,H=0,dpr=1;
-let running=false,charge=100,distance=0,world=0,speed=0,lane=0;
-let hits=0,foods=[],traffic=[],nextSpawn=0,nextTraffic=0;
-let lastTime=0,toastTimer=0,invincible=0;
-let boostRemaining=5,boostCooldown=0;
-
-const keys={left:false,right:false,go:false,fast:false,brake:false};
-
-const foodTypes=[
- {emoji:"🐟",name:"কাশেম মামার আফ্রিকান মাগুর",short:"কাশেম মামার আফ্রিকান মাগুর",power:18},
- {emoji:"🍗",name:"আপেল মামার মুরগী",short:"আপেল মামার মুরগী",power:22},
- {emoji:"🥛",name:"আড়ং UHT Milk",short:"আড়ং UHT Milk",power:15},
- {emoji:"🥚",name:"আপেল মামার ডিম",short:"আপেল মামার ডিম",power:12}
-];
-
-const signNames=[
- "শামসুদ্দিন হল ৭ কি.মি.",
- "ওসমানী মেডিকেল ১২ কি.মি.",
- "শাহজালাল মাজার ৮ কি.মি.",
- "রিকাবিবাজার ৬ কি.মি.",
- "পাঁচ ভাই রেস্টুরেন্ট ১১ কি.মি.",
- "পানশি রেস্টুরেন্ট ১৩ কি.মি.",
- "মেহমান রেস্টুরেন্ট ১৫ কি.মি."
-];
-
 function resize(){
- dpr=Math.min(devicePixelRatio||1,2);
- W=canvas.clientWidth;H=canvas.clientHeight;
- canvas.width=Math.round(W*dpr);
- canvas.height=Math.round(H*dpr);
- ctx.setTransform(dpr,0,0,dpr,0,0);
- draw();
+  const rect=canvas.getBoundingClientRect();
+  dpr=Math.min(window.devicePixelRatio||1,2);
+  W=rect.width; H=rect.height;
+  canvas.width=Math.round(W*dpr);
+  canvas.height=Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
 }
 window.addEventListener("resize",resize);
+resize();
 
-function toast(t){
- $("toast").textContent=t;
- $("toast").style.display="block";
- toastTimer=1.8;
-}
-function updateHud(){
- $("distance").textContent=bn(distance);
- $("speed").textContent=bn(speed);
- $("hits").textContent=bn(hits);
- $("chargeText").textContent=bn(charge);
- $("chargeFill").style.width=charge+"%";
- $("chargeFill").style.background=charge<=20?"#ff4444":charge<=40?"#ffc83d":"#41e16f";
+const lanes=[-.72,-.36,0,.36,.72];
+const foods=[
+  {name:"কাশেম মামার আফ্রিকান মাগুর",emoji:"🐟",short:"আফ্রিকান মাগুর"},
+  {name:"আপেল মামার মুরগী",emoji:"🍗",short:"মুরগী"},
+  {name:"আড়ং UHT Milk",emoji:"🥛",short:"UHT Milk"},
+  {name:"আপেল মামার ডিম",emoji:"🥚",short:"ডিম"}
+];
+const signNames=[
+  "শামসুদ্দিন হল ৭ কি.মি.",
+  "ওসমানী মেডিকেল ১২ কি.মি.",
+  "শাহজালাল মাজার ৮ কি.মি.",
+  "রিকাবিবাজার ৬ কি.মি.",
+  "পাঁচ ভাই রেস্টুরেন্ট ১১ কি.মি.",
+  "পানশি রেস্টুরেন্ট ১৩ কি.মি.",
+  "মেহমান রেস্টুরেন্ট ১৫ কি.মি."
+];
 
- const boostReady=boostCooldown<=0;
- $("boostText").textContent=boostReady?bn(Math.ceil(boostRemaining)):("রিফিল "+bn(Math.ceil(boostCooldown)));
- $("boostFill").style.width=boostReady?(boostRemaining/5*100)+"%":((5-boostCooldown)/5*100)+"%";
- $("boostFill").style.background=boostReady?"#ff8c36":"#777";
- $("fast").style.opacity=boostReady?"1":".55";
-}
+let running=false,score=0,charge=100,hits=0,speed=0;
+let playerLane=2,playerX=0,playerTargetX=0;
+let roadOffset=0,worldTime=0,lastTime=0;
+let traffic=[],pickups=[],signs=[];
+let invulnerableUntil=0;
+let turboUntil=0,turboCooldownUntil=0;
+let turboReady=true;
+let lastPickup=0,lastTrafficSpawn=0,lastSignSpawn=0;
+let keys={left:false,right:false,accel:false,brake:false};
+let animationId=0;
+
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+const rand=(a,b)=>a+Math.random()*(b-a);
+const choose=a=>a[Math.floor(Math.random()*a.length)];
+const bn=n=>Math.floor(n).toLocaleString("bn-BD");
+
+function roadWidth(){return Math.min(W*.78,430)}
+function roadLeft(){return (W-roadWidth())/2}
+function laneX(lane){return W/2+lane*roadWidth()*.47}
+function playerY(){return H*.78}
+function carWidth(){return Math.max(29,roadWidth()*.105)}
 
 function resetGame(){
- charge=100;distance=0;world=0;speed=0;lane=0;hits=0;
- foods=[];traffic=[];nextSpawn=0;nextTraffic=0;
- lastTime=0;toastTimer=0;invincible=0;
- boostRemaining=5;boostCooldown=0;
- Object.keys(keys).forEach(k=>keys[k]=false);
- $("toast").style.display="none";
- $("panelTitle").textContent="সিলেট টেসলা রাইড";
- $("panelMessage").textContent="প্রোটিন সংগ্রহ করো, গাড়ি এড়িয়ে চলো। ৩ বার ধাক্কা লাগলে গেম ওভার!";
- $("start").textContent="যাত্রা শুরু";
- updateHud();
+  score=0;charge=100;hits=0;speed=0;
+  playerLane=2;playerX=0;playerTargetX=0;
+  roadOffset=0;worldTime=0;
+  invulnerableUntil=0;
+  turboUntil=0;turboCooldownUntil=0;turboReady=true;
+  lastPickup=0;lastTrafficSpawn=0;lastSignSpawn=0;
+  traffic=[];pickups=[];signs=[];
+  for(let i=0;i<4;i++){
+    signs.push({side:i%2?1:-1,y:-i*H*.45-100,text:choose(signNames)});
+  }
+  for(let i=0;i<3;i++){
+    spawnTraffic(-i*H*.4-180);
+  }
+  updateHud();
 }
-
-const music=$("bgMusic"),musicBtn=$("musicBtn");
-music.volume=.4;
-
-async function startMusic(){
- try{
-  await music.play();
-  musicBtn.textContent="🔊 গান বন্ধ";
- }catch(e){
-  musicBtn.textContent="🎵 গান চালু";
-  toast("গান চালাতে গান চালু বোতামে চাপ দাও।");
- }
-}
-musicBtn.addEventListener("click",async()=>{
- if(music.paused)await startMusic();
- else{
-  music.pause();
-  musicBtn.textContent="🎵 গান চালু";
- }
-});
 
 function startGame(){
- resetGame();
- running=true;
- $("overlay").style.display="none";
- lastTime=performance.now();
- startMusic();
- requestAnimationFrame(loop);
+  cancelAnimationFrame(animationId);
+  resetGame();
+  running=true;
+  $("overlay").style.display="none";
+  lastTime=performance.now();
+  const music=$("music");
+  music.play().catch(()=>{});
+  animationId=requestAnimationFrame(loop);
 }
-$("start").addEventListener("click",startGame);
+
+function spawnTraffic(y=-100){
+  const lane=Math.floor(Math.random()*lanes.length);
+  const type=Math.random()<.36?"auto":"car";
+  traffic.push({
+    lane,x:laneX(lanes[lane]),y,
+    type,
+    color:choose(["#e74c3c","#f4c542","#35a7e8","#e8e8e8","#8e68ce","#f08c45","#2ecc71"]),
+    factor:rand(.62,1.12),
+    sway:rand(0,Math.PI*2),
+    swayRate:rand(.4,1.1),
+    passed:false,
+    nearMiss:false
+  });
+}
+
+function spawnPickup(){
+  const lane=Math.floor(Math.random()*lanes.length);
+  pickups.push({
+    lane,x:laneX(lanes[lane]),y:-50,
+    food:choose(foods),
+    spin:rand(0,6)
+  });
+}
+
+function spawnSign(){
+  signs.push({
+    side:Math.random()<.5?-1:1,
+    y:-80,
+    text:choose(signNames)
+  });
+}
+
+function activateTurbo(){
+  const now=performance.now();
+  if(!running)return;
+  if(now<turboUntil)return;
+  if(now<turboCooldownUntil)return;
+  turboUntil=now+5000;
+  turboCooldownUntil=turboUntil+5000;
+  turboReady=false;
+  updateHud();
+}
+
+function updateTurbo(now){
+  if(turboUntil && now>=turboUntil){
+    turboUntil=0;
+  }
+  if(!turboUntil && !turboReady && now>=turboCooldownUntil){
+    turboReady=true;
+    turboCooldownUntil=0;
+  }
+}
+
+function updateHud(){
+  $("score").textContent=bn(score);
+  $("speed").textContent=bn(Math.round(speed));
+  $("chargeBar").style.width=clamp(charge,0,100)+"%";
+  $("chargeBar").style.background=charge<25?"#ff4545":charge<50?"#ffc928":"#35e879";
+  $("hits").textContent=bn(hits);
+
+  const now=performance.now();
+  const active=now<turboUntil;
+  const remaining=active?turboUntil-now:turboReady?5000:Math.max(0,turboCooldownUntil-now);
+  $("turboBar").style.width=(active?remaining/5000*100:turboReady?100:(1-remaining/5000)*100)+"%";
+  $("turboText").textContent=active?"খাড়া টান: চালু":turboReady?"খাড়া টান: প্রস্তুত":"রিফিল: "+bn(Math.ceil(remaining/1000))+" সে.";
+  $("turboBtn").classList.toggle("ready",turboReady);
+  $("turboBtn").classList.toggle("cool",!turboReady);
+}
+
+function roundedRect(x,y,w,h,r,fill,stroke){
+  ctx.beginPath();
+  ctx.roundRect(x,y,w,h,r);
+  if(fill){ctx.fillStyle=fill;ctx.fill()}
+  if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}
+}
+
+function drawCar(x,y,w,h,color,type="car",isPlayer=false){
+  ctx.save();
+  ctx.translate(x,y);
+  // ছায়া
+  ctx.fillStyle="#0004";
+  ctx.beginPath();ctx.ellipse(2,h*.12,w*.62,h*.54,0,0,Math.PI*2);ctx.fill();
+
+  if(type==="auto"){
+    // অটোর চাকা
+    ctx.fillStyle="#202329";
+    roundedRect(-w*.52,-h*.25,w*.18,h*.34,4,"#202329");
+    roundedRect(w*.34,-h*.25,w*.18,h*.34,4,"#202329");
+    roundedRect(-w*.52,h*.25,w*.18,h*.34,4,"#202329");
+    roundedRect(w*.34,h*.25,w*.18,h*.34,4,"#202329");
+    // অটোর বডি
+    roundedRect(-w*.42,-h*.49,w*.84,h*.98,7,color);
+    roundedRect(-w*.32,-h*.34,w*.64,h*.38,4,"#a7e7ee");
+    roundedRect(-w*.32,h*.12,w*.64,h*.23,3,"#f7d85d");
+    ctx.fillStyle="#202329";
+    ctx.fillRect(-w*.3,-h*.02,w*.6,2);
+  }else{
+    roundedRect(-w*.47,-h*.5,w*.94,h,8,"#25282b");
+    roundedRect(-w*.4,-h*.48,w*.8,h*.96,7,color);
+    roundedRect(-w*.32,-h*.31,w*.64,h*.27,4,"#a8e4f4");
+    roundedRect(-w*.32,h*.07,w*.64,h*.23,4,"#9ad8e9");
+    ctx.fillStyle="#fff2bb";
+    ctx.fillRect(-w*.32,-h*.47,w*.17,4);
+    ctx.fillRect(w*.15,-h*.47,w*.17,4);
+  }
+  // পেছনের লাইট
+  ctx.fillStyle="#ff3b30";
+  ctx.fillRect(-w*.34,h*.39,w*.2,3);
+  ctx.fillRect(w*.14,h*.39,w*.2,3);
+
+  if(isPlayer){
+    ctx.fillStyle="#111";
+    ctx.font="bold "+Math.max(9,w*.22)+"px Arial";
+    ctx.textAlign="center";
+    ctx.fillText("EV",0,h*.17);
+  }
+  ctx.restore();
+}
+
+function drawRoad(dt){
+  // ঘাস
+  ctx.fillStyle="#39874b";ctx.fillRect(0,0,W,H);
+
+  // রাস্তার পাশের ঝোপ/গাছ
+  for(let y=-80+(roadOffset%150);y<H+80;y+=150){
+    for(const side of [-1,1]){
+      const x=W/2+side*(roadWidth()*.5+randStable(y,side)*W*.1+20);
+      ctx.fillStyle="#245e38";
+      ctx.beginPath();ctx.arc(x,y,13,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle="#4b9d54";
+      ctx.beginPath();ctx.arc(x-4,y-5,10,0,Math.PI*2);ctx.fill();
+    }
+  }
+
+  // রাস্তা
+  const left=roadLeft(),rw=roadWidth();
+  ctx.fillStyle="#555b61";ctx.fillRect(left,0,rw,H);
+
+  // রাস্তার কিনারার সাদা লাইন
+  ctx.fillStyle="#f4f0d6";
+  ctx.fillRect(left+3,0,3,H);ctx.fillRect(left+rw-6,0,3,H);
+
+  // লেন মার্কিং
+  ctx.fillStyle="#e7e6d9";
+  const dash=48,gap=35,offset=roadOffset%(dash+gap);
+  for(let lane=1;lane<5;lane++){
+    const x=left+rw*lane/5;
+    for(let y=-dash+offset;y<H;y+=dash+gap){
+      ctx.fillRect(x-1.5,y,3,dash);
+    }
+  }
+}
+function randStable(y,side){
+  return (Math.abs(Math.floor(y/150)*37+side*19)%100)/100;
+}
+
+function drawSigns(){
+  for(const s of signs){
+    const x=W/2+s.side*(roadWidth()*.5+46);
+    ctx.save();
+    ctx.translate(x,s.y);
+    ctx.fillStyle="#4a3322";ctx.fillRect(-3,5,6,42);
+    roundedRect(-55,-24,110,32,5,"#fff3b0","#6a4b20");
+    ctx.fillStyle="#193c29";
+    ctx.font="bold 10px Arial";
+    ctx.textAlign="center";
+    ctx.fillText(s.text,0,-4,104);
+    ctx.restore();
+  }
+}
+
+function drawPickups(){
+  for(const p of pickups){
+    ctx.save();
+    ctx.translate(p.x,p.y);
+    ctx.rotate(Math.sin(p.spin)*.07);
+    ctx.fillStyle="#0005";
+    ctx.beginPath();ctx.ellipse(0,13,17,6,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#fff";
+    ctx.beginPath();ctx.arc(0,0,18,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle="#ffc928";ctx.lineWidth=3;ctx.stroke();
+    ctx.font="22px Arial";ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillText(p.food.emoji,0,1);
+    ctx.restore();
+  }
+}
+
+function drawTraffic(){
+  for(const t of traffic){
+    drawCar(t.x,t.y,carWidth()*.86,carWidth()*1.65,t.color,t.type,false);
+  }
+}
+
+function drawPlayer(now){
+  const w=carWidth()*1.1,h=w*1.72;
+  if(now<invulnerableUntil && Math.floor(now/100)%2===0)return;
+  drawCar(W/2+playerX*roadWidth()*.47,playerY(),w,h,"#14a8ee","car",true);
+}
+
+function update(dt,now){
+  updateTurbo(now);
+  const turbo=now<turboUntil;
+  const maxSpeed=turbo?130:85;
+  if(keys.accel)speed+=65*dt;
+  else speed-=18*dt;
+  if(keys.brake)speed-=90*dt;
+  speed=clamp(speed,0,maxSpeed);
+
+  if(charge<=0){endGame("চার্জ শেষ হয়ে গেছে!");return}
+  if(speed>0)charge-=dt*(.35+speed*.007);
+  charge=clamp(charge,0,100);
+
+  const moveSpeed=(55+speed*1.7)*(turbo?1.45:1);
+  roadOffset+=moveSpeed*dt;
+  worldTime+=dt;
+
+  // লেনের লক্ষ্য ধীরে অনুসরণ করে
+  if(keys.left)playerLane=Math.max(0,playerLane-1);
+  if(keys.right)playerLane=Math.min(4,playerLane+1);
+  // একবার চাপলে এক লেন, ধরে রাখলেও ক্রমাগত লেন বদলাবে না
+  playerTargetX=lanes[playerLane];
+  playerX+=(playerTargetX-playerX)*Math.min(1,dt*9);
+
+  // সাইনবোর্ড সবসময় গতিশীল
+  for(const s of signs)s.y+=moveSpeed*dt;
+  signs=signs.filter(s=>s.y<H+80);
+  if(now-lastSignSpawn>1600){
+    spawnSign();lastSignSpawn=now;
+  }
+
+  // ট্রাফিক: সব গাড়ির y প্রতি ফ্রেমে বাড়ে, তাই আটকে থাকে না
+  for(const t of traffic){
+    const relativeSpeed=moveSpeed*(1.05-t.factor*.25);
+    t.y+=relativeSpeed*dt;
+    t.sway+=dt*t.swayRate;
+    const sway=Math.sin(t.sway)*roadWidth()*.008;
+    t.x=laneX(lanes[t.lane])+sway;
+
+    if(!t.passed && t.y>playerY()+carWidth()){
+      t.passed=true;
+      score+=2;
+    }
+
+    const dx=Math.abs((W/2+playerX*roadWidth()*.47)-t.x);
+    const dy=Math.abs(playerY()-t.y);
+    if(dx<carWidth()*.78 && dy<carWidth()*1.15 && now>invulnerableUntil){
+      hits++;
+      charge=Math.max(0,charge-12);
+      invulnerableUntil=now+1100;
+      speed=Math.max(10,speed*.48);
+      t.y=H+200;
+      if(hits>=3){endGame("তিনবার ধাক্কা লেগেছে!");return}
+    }else if(!t.nearMiss && !t.passed && dy<carWidth()*.8 && dx<carWidth()*1.5){
+      t.nearMiss=true;
+      score+=1;
+    }
+  }
+
+  // পুরোনো গাড়ি সরিয়ে নতুন গাড়ি আনা
+  traffic=traffic.filter(t=>t.y<H+carWidth()*3);
+  if(now-lastTrafficSpawn>Math.max(430,1050-speed*4)){
+    if(traffic.length<8)spawnTraffic(-carWidth()*2);
+    lastTrafficSpawn=now;
+  }
+  // ফাঁকা রাস্তা হলে গাড়ি যোগ করো
+  if(traffic.length<3 && Math.random()<dt*.7)spawnTraffic(-100);
+
+  // খাবার
+  for(const p of pickups){
+    p.y+=moveSpeed*dt;
+    p.spin+=dt*3;
+    const px=W/2+playerX*roadWidth()*.47;
+    if(Math.abs(px-p.x)<carWidth()*.9 && Math.abs(playerY()-p.y)<carWidth()*1.1){
+      score+=10;
+      charge=Math.min(100,charge+25);
+      p.y=H+200;
+      showPickup(p.food);
+    }
+  }
+  pickups=pickups.filter(p=>p.y<H+60);
+  if(now-lastPickup>2300){
+    if(pickups.length<3)spawnPickup();
+    lastPickup=now;
+  }
+
+  updateHud();
+}
+
+let pickupMessage="",pickupMessageUntil=0;
+function showPickup(food){
+  pickupMessage="+"+food.short+"  •  চার্জ বেড়েছে!";
+  pickupMessageUntil=performance.now()+1300;
+}
+
+function drawMessage(now){
+  if(now<pickupMessageUntil){
+    ctx.save();
+    ctx.font="bold 17px Arial";
+    ctx.textAlign="center";
+    const text=pickupMessage;
+    roundedRect(W/2-145,H*.2-19,290,38,12,"#0b1725dd");
+    ctx.fillStyle="#fff";
+    ctx.fillText(text,W/2,H*.2+6,275);
+    ctx.restore();
+  }
+  if(now<turboUntil){
+    ctx.save();
+    ctx.fillStyle="#ffdb55";
+    ctx.font="bold 20px Arial";
+    ctx.textAlign="center";
+    ctx.fillText("⚡ খাড়া টান!",W/2,H*.3);
+    ctx.restore();
+  }
+}
+
+function draw(now){
+  drawRoad();
+  drawSigns();
+  drawPickups();
+  drawTraffic();
+  drawPlayer(now);
+  drawMessage(now);
+}
+
+function loop(now){
+  if(!running)return;
+  const dt=clamp((now-lastTime)/1000,0,.04);
+  lastTime=now;
+  update(dt,now);
+  draw(now);
+  if(running)animationId=requestAnimationFrame(loop);
+}
+
+function praiseForScore(s){
+  if(s>=500)return ["🏆 অসাধারণ ড্রাইভিং!","তুমি তো সিলেটের রাস্তার কিংবদন্তি! এত বড় স্কোর সত্যিই দারুণ!"];
+  if(s>=300)return ["🌟 দুর্দান্ত!","তোমার ড্রাইভিং দক্ষতা অসাধারণ। আরেকবার খেললে নতুন রেকর্ড হতে পারে!"];
+  if(s>=150)return ["👏 বেশ ভালো খেলেছ!","তুমি ভালোই এগিয়েছিলে। এবার আরও সাবধানে চালিয়ে স্কোর বাড়াও!"];
+  if(s>=60)return ["👍 ভালো চেষ্টা!","শুরুটা ভালো হয়েছে। খাবার সংগ্রহ করো, চার্জ বাঁচাও—পরেরবার আরও ভালো করবে!"];
+  return ["🙂 আবার চেষ্টা করো!","প্রতিটি চেষ্টাতেই দক্ষতা বাড়ে। এবার ধীরে চালাও এবং খাবার সংগ্রহ করতে ভুলো না!"];
+}
 
 function endGame(reason){
- if(!running)return;
- running=false;
- Object.keys(keys).forEach(k=>keys[k]=false);
- $("panelTitle").textContent="গেম ওভার!";
- $("panelMessage").textContent=reason+" তোমার দূরত্ব: "+bn(distance)+" মিটার। আবার চেষ্টা করো!";
- $("start").textContent="আবার যাত্রা শুরু";
- $("overlay").style.display="flex";
+  if(!running)return;
+  running=false;
+  cancelAnimationFrame(animationId);
+  const [title,message]=praiseForScore(score);
+  $("overlay").style.display="flex";
+  $("dialog").innerHTML=
+    "<h1>গেম ওভার</h1>"+
+    "<p>"+reason+"</p>"+
+    "<h2>"+title+"</h2>"+
+    "<p>তোমার স্কোর: <strong>"+bn(score)+"</strong></p>"+
+    "<p>"+message+"</p>"+
+    '<button class="mainBtn" id="restartBtn">আবার খেলো</button>'+
+    '<p class="note">সেরা স্কোর: '+bn(saveBest(score))+'</p>';
+  $("restartBtn").addEventListener("click",startGame);
 }
 
-function bindHold(id,key){
- const el=$(id);
- const down=e=>{e.preventDefault();keys[key]=true;};
- const up=()=>{keys[key]=false;};
- el.addEventListener("pointerdown",down);
- el.addEventListener("pointerup",up);
- el.addEventListener("pointercancel",up);
- el.addEventListener("lostpointercapture",up);
- el.addEventListener("pointerleave",up);
+function saveBest(s){
+  // স্থানীয় স্টোরেজের ওপর নির্ভর না করে এই সেশনের রেকর্ড
+  bestScore=Math.max(bestScore,s);
+  return bestScore;
 }
-bindHold("left","left");
-bindHold("right","right");
-bindHold("go","go");
-bindHold("fast","fast");
-bindHold("brake","brake");
+let bestScore=0;
 
+// বোতাম ধরে রাখার ইনপুট
+function holdButton(id,key){
+  const el=$(id);
+  const down=e=>{
+    e.preventDefault();
+    keys[key]=true;
+  };
+  const up=e=>{
+    e.preventDefault();
+    keys[key]=false;
+  };
+  el.addEventListener("pointerdown",down);
+  el.addEventListener("pointerup",up);
+  el.addEventListener("pointercancel",up);
+  el.addEventListener("pointerleave",up);
+}
+holdButton("leftBtn","left");
+holdButton("rightBtn","right");
+holdButton("accelBtn","accel");
+holdButton("brakeBtn","brake");
+
+// লেন বাটনে একবার চাপলে একবারই লেন পরিবর্তন
+$("leftBtn").addEventListener("pointerdown",e=>{
+  e.preventDefault();
+  if(running)playerLane=Math.max(0,playerLane-1);
+});
+$("rightBtn").addEventListener("pointerdown",e=>{
+  e.preventDefault();
+  if(running)playerLane=Math.min(4,playerLane+1);
+});
+// hold handlers-এর পুনরাবৃত্ত লেন পরিবর্তন বন্ধ
+keys.left=false;keys.right=false;
+
+$("turboBtn").addEventListener("pointerdown",e=>{
+  e.preventDefault();
+  activateTurbo();
+});
+$("startBtn").addEventListener("click",startGame);
+
+$("musicBtn").addEventListener("click",()=>{
+  const m=$("music");
+  if(m.paused){
+    m.play().then(()=>{$("musicBtn").textContent="🔊 গান"}).catch(()=>{});
+  }else{
+    m.pause();
+    $("musicBtn").textContent="🔇 গান";
+  }
+});
+
+// কিবোর্ড কন্ট্রোল
 window.addEventListener("keydown",e=>{
- if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"," "].includes(e.key))e.preventDefault();
- if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")keys.left=true;
- if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")keys.right=true;
- if(e.key==="ArrowUp"||e.key.toLowerCase()==="w")keys.go=true;
- if(e.key==="ArrowDown"||e.key.toLowerCase()==="s")keys.brake=true;
- if(e.key.toLowerCase()==="shift")keys.fast=true;
+  if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"," "].includes(e.key))e.preventDefault();
+  if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a"){
+    if(!keys.left && running)playerLane=Math.max(0,playerLane-1);
+    keys.left=true;
+  }
+  if(e.key==="ArrowRight"||e.key.toLowerCase()==="d"){
+    if(!keys.right && running)playerLane=Math.min(4,playerLane+1);
+    keys.right=true;
+  }
+  if(e.key==="ArrowUp"||e.key.toLowerCase()==="w")keys.accel=true;
+  if(e.key==="ArrowDown"||e.key.toLowerCase()==="s")keys.brake=true;
+  if((e.key===" "||e.key.toLowerCase()==="x")&&!e.repeat)activateTurbo();
 });
 window.addEventListener("keyup",e=>{
- if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")keys.left=false;
- if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")keys.right=false;
- if(e.key==="ArrowUp"||e.key.toLowerCase()==="w")keys.go=false;
- if(e.key==="ArrowDown"||e.key.toLowerCase()==="s")keys.brake=false;
- if(e.key.toLowerCase()==="shift")keys.fast=false;
+  if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")keys.left=false;
+  if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")keys.right=false;
+  if(e.key==="ArrowUp"||e.key.toLowerCase()==="w")keys.accel=false;
+  if(e.key==="ArrowDown"||e.key.toLowerCase()==="s")keys.brake=false;
 });
-window.addEventListener("blur",()=>Object.keys(keys).forEach(k=>keys[k]=false));
+window.addEventListener("blur",()=>{
+  keys={left:false,right:false,accel:false,brake:false};
+});
 
-function rr(x,y,w,h,r,color){
- ctx.fillStyle=color;
- ctx.beginPath();
- ctx.roundRect(x,y,w,h,r);
- ctx.fill();
-}
-function poly(points,color){
- ctx.fillStyle=color;
- ctx.beginPath();
- ctx.moveTo(points[0][0],points[0][1]);
- for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);
- ctx.closePath();
- ctx.fill();
-}
-function tree(x,y,s){
- ctx.fillStyle="#754b2a";
- ctx.fillRect(x-s*.08,y-s*.1,s*.16,s*.5);
- ctx.fillStyle="#26783c";
- ctx.beginPath();ctx.arc(x,y-s*.25,s*.33,0,7);ctx.fill();
- ctx.fillStyle="#39964d";
- ctx.beginPath();ctx.arc(x-s*.15,y-s*.35,s*.2,0,7);ctx.fill();
-}
-function building(x,y,w,h,color){
- ctx.fillStyle=color;ctx.fillRect(x,y,w,h);
- ctx.fillStyle="#dceaf0";
- for(let yy=y+8;yy<y+h-5;yy+=16)
-  for(let xx=x+5;xx<x+w-5;xx+=13)ctx.fillRect(xx,yy,6,8);
- ctx.fillStyle="#eee0c2";ctx.fillRect(x-2,y,w+4,4);
-}
-
-function drawRoad(){
- const horizon=H*.39,bottom=H+20,center=W*.5;
- const roadTop=W*.10,roadBottom=W*.94;
-
- const sky=ctx.createLinearGradient(0,0,0,horizon);
- sky.addColorStop(0,"#65c4ed");sky.addColorStop(1,"#d8f4fb");
- ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
- poly([[0,horizon],[W*.16,H*.27],[W*.31,horizon],[W*.48,H*.25],[W*.66,horizon],[W*.85,H*.28],[W,horizon]],"#78bd8a");
- ctx.fillStyle="#ffe69a";ctx.beginPath();ctx.arc(W*.82,H*.12,23,0,7);ctx.fill();
-
- for(let i=0;i<12;i++){
-  const x=i*W/10-W*.03,hh=20+(i*17%35);
-  building(x,horizon-hh,W*.075,hh,["#e7bfa0","#d8d4b8","#d9e3e2","#d8b7a4"][i%4]);
- }
-
- ctx.fillStyle="#62b85b";ctx.fillRect(0,horizon,W,H-horizon);
- poly([[center-roadTop/2,horizon],[center+roadTop/2,horizon],[center+roadBottom/2,bottom],[center-roadBottom/2,bottom]],"#55595b");
- poly([[center-roadTop/2,horizon],[center-roadTop/2+3,horizon],[center-roadBottom/2+8,bottom],[center-roadBottom/2,bottom]],"#e9e4d4");
- poly([[center+roadTop/2-3,horizon],[center+roadTop/2,horizon],[center+roadBottom/2,bottom],[center+roadBottom/2-8,bottom]],"#e9e4d4");
-
- const phase=(world*.055)%1;
- for(let i=0;i<12;i++){
-  let p=(i/12+phase/12)%1;
-  let y=horizon+p*p*(H-horizon);
-  let rw=roadTop+(roadBottom-roadTop)*p*p,dh=5+25*p*p;
-  ctx.fillStyle="#f9f1ce";
-  ctx.fillRect(center-rw*.17,y,Math.max(2,W*.006),dh);
-  ctx.fillRect(center+rw*.17,y,Math.max(2,W*.006),dh);
- }
-
- // দুই পাশে এলোমেলো জায়গার সাইনবোর্ড
- for(const side of [-1,1]){
-  for(let i=0;i<9;i++){
-   const p=((i/9+(world*.0007)%1)%1);
-   const y=horizon+p*p*(H-horizon);
-   const rw=roadTop+(roadBottom-roadTop)*p*p;
-   const x=center+side*(rw*.5+W*.04+p*W*.11);
-   const s=10+p*38;
-
-   if(i%3===0){
-    const signIndex=(i*2+Math.floor(world/650)+(side===1?1:0))%signNames.length;
-    const label=signNames[signIndex];
-    const bw=Math.max(s*2.8,85*p);
-    const bh=Math.max(17,s*.7);
-    rr(x-bw/2,y-s*.55,bw,bh,3,"#f4d65a");
-    ctx.strokeStyle="#704d1c";
-    ctx.lineWidth=Math.max(1,p*2);
-    ctx.strokeRect(x-bw/2,y-s*.55,bw,bh);
-
-    ctx.fillStyle="#163e2c";
-    ctx.textAlign="center";
-    ctx.textBaseline="middle";
-    ctx.font=`bold ${Math.max(5,Math.min(12,s*.20))}px Arial`;
-    ctx.fillText(label,x,y-s*.55+bh/2,bw-4);
-    ctx.fillStyle="#76502b";
-    ctx.fillRect(x-s*.045,y-s*.55+bh,s*.09,s*.65);
-   }else if(i%3===1){
-    tree(x,y,s);
-   }else{
-    rr(x-s*.5,y-s*.5,s,s*.7,2,"#e9d7b4");
-    ctx.fillStyle="#34734a";
-    ctx.font=`bold ${Math.max(5,s*.19)}px Arial`;
-    ctx.textAlign="center";
-    ctx.fillText("সিলেট",x,y-s*.2);
-   }
-  }
- }
- return {horizon,center,roadTop,roadBottom};
-}
-
-/* যাত্রীবাহী অটোরিকশা */
-function drawAuto(x,y,scale){
- ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
- ctx.fillStyle="#0004";ctx.beginPath();ctx.ellipse(0,5,49,11,0,0,7);ctx.fill();
- rr(-37,-3,14,23,5,"#181818");
- rr(24,-3,14,23,5,"#181818");
- poly([[-43,-25],[34,-25],[43,5],[-45,5]],"#148c50");
- poly([[-37,-18],[32,-18],[35,-7],[-39,-7]],"#f3c83f");
- poly([[-31,-51],[24,-51],[33,-25],[-35,-25]],"#216e4a");
- rr(-34,-59,69,9,3,"#f5cf37");
- rr(-30,-56,60,4,2,"#e4f1e9");
- ctx.strokeStyle="#f5d24c";ctx.lineWidth=3;
- ctx.beginPath();
- ctx.moveTo(-32,-45);ctx.lineTo(-32,-25);
- ctx.moveTo(29,-45);ctx.lineTo(29,-25);
- ctx.moveTo(-32,-32);ctx.lineTo(30,-32);
- ctx.stroke();
- poly([[-25,-46],[15,-46],[25,-24],[-31,-24]],"#285d72");
- poly([[-20,-42],[-1,-42],[-1,-27],[-25,-27]],"#b8e8f5");
- poly([[3,-42],[12,-42],[20,-27],[3,-27]],"#b8e8f5");
- ctx.fillStyle="#d9a17b";ctx.beginPath();ctx.arc(0,-36,6,0,7);ctx.fill();
- ctx.fillStyle="#25313a";ctx.fillRect(-6,-30,12,6);
- ctx.save();ctx.translate(0,7);
- rr(-9,-5,18,18,6,"#171717");
- rr(-4,0,8,7,3,"#aaaaaa");
- ctx.restore();
- ctx.fillStyle="#fff0a8";ctx.fillRect(-34,-16,8,6);ctx.fillRect(27,-16,8,6);
- ctx.fillStyle="#d5d5d5";ctx.fillRect(-40,5,80,4);
- ctx.restore();
-}
-
-/* অন্য গাড়ি */
-function drawTrafficCar(x,y,size,type,color){
- ctx.save();ctx.translate(x,y);
- const s=size/40;ctx.scale(s,s);
- if(type==="auto"){
-  rr(-19,-20,38,38,5,color);
-  poly([[-15,-19],[13,-19],[17,-7],[-16,-7]],"#a9e2ed");
-  rr(-21,12,42,5,2,"#e9c640");
-  rr(-16,15,8,9,3,"#161616");
-  rr(8,15,8,9,3,"#161616");
-  ctx.fillStyle="#fff4b0";ctx.fillRect(-18,3,5,5);ctx.fillRect(13,3,5,5);
- }else{
-  rr(-17,-23,34,48,6,color);
-  poly([[-12,-18],[12,-18],[14,-5],[-14,-5]],"#b7e7f4");
-  poly([[-12,0],[12,0],[13,10],[-13,10]],"#76b7c9");
-  rr(-20,-15,4,10,2,"#222");rr(16,-15,4,10,2,"#222");
-  rr(-15,18,7,8,2,"#191919");rr(8,18,7,8,2,"#191919");
-  ctx.fillStyle="#ffdf85";ctx.fillRect(-14,19,5,3);ctx.fillRect(9,19,5,3);
- }
- ctx.restore();
-}
-
-function projectObject(f,road){
- const ahead=f.z-world,p=1-ahead/1050;
- if(p<0||p>1.1)return null;
- const y=road.horizon+p*p*(H-road.horizon);
- const rw=road.roadTop+(road.roadBottom-road.roadTop)*p*p;
- const x=road.center+f.lane*rw*.38;
- return {x,y,size:12+p*35,p};
-}
-function drawFood(f,road){
- const q=projectObject(f,road);if(!q)return;
- ctx.save();
- ctx.textAlign="center";ctx.textBaseline="middle";
- ctx.font=`${q.size}px Arial`;
- ctx.shadowColor="#0007";ctx.shadowBlur=5;
- ctx.fillText(f.emoji,q.x,q.y);
- ctx.shadowBlur=0;
-
- // লম্বা নামের জন্য ছোট ব্যাকগ্রাউন্ড লেবেল
- const label=f.short||f.name;
- const fontSize=Math.max(9,Math.min(13,q.size*.36));
- ctx.font=`bold ${fontSize}px Arial`;
- const labelY=q.y+q.size*.68;
- const labelW=Math.min(W-12,Math.max(62,ctx.measureText(label).width+10));
- rr(q.x-labelW/2,labelY-fontSize*.7,labelW,fontSize*1.65,4,"#fff1c9");
- ctx.fillStyle="#17212a";
- ctx.fillText(label,q.x,labelY,labelW-5);
- ctx.restore();
-}
-function drawTraffic(car,road){
- const q=projectObject(car,road);
- if(!q)return;
- drawTrafficCar(q.x,q.y,q.size,car.type,car.color);
-}
-
-function update(dt){
- // খাড়া টান: ৫ সেকেন্ড ব্যবহার, তারপর ৫ সেকেন্ড রিফিল
- if(boostCooldown>0){
-  boostCooldown=Math.max(0,boostCooldown-dt);
-  keys.fast=false;
- }
- const boostActive=keys.fast&&boostRemaining>0&&boostCooldown<=0;
-
- if(boostActive){
-  boostRemaining=Math.max(0,boostRemaining-dt);
-  speed+=100*dt;
-  if(boostRemaining<=0){
-   boostRemaining=0;
-   boostCooldown=5;
-   keys.fast=false;
-   toast("খাড়া টান শেষ! ৫ সেকেন্ডে রিফিল হবে।");
-  }
- }else if(keys.go){
-  speed+=45*dt;
- }else{
-  speed-=12*dt;
- }
-
- if(keys.brake)speed-=65*dt;
- const maxSpeed=boostActive?130:85;
- speed=Math.max(0,Math.min(maxSpeed,speed));
-
- if(keys.left)lane-=1.4*dt;
- if(keys.right)lane+=1.4*dt;
- lane=Math.max(-.85,Math.min(.85,lane));
-
- world+=speed*dt*1.8;
- distance+=speed*dt*.55;
- charge=Math.max(0,charge-speed*dt*.045);
- invincible=Math.max(0,invincible-dt);
-
- const road={horizon:H*.39,center:W*.5,roadTop:W*.10,roadBottom:W*.94};
-
- // খাবার সামনে আসবে
- if(foods.length<3&&world>=nextSpawn){
-  const f=foodTypes[Math.floor(Math.random()*foodTypes.length)];
-  foods.push({...f,z:world+850+Math.random()*280,lane:(Math.random()*1.4)-.7});
-  nextSpawn=world+240+Math.random()*320;
- }
-
- // গাড়ির জন্য পাঁচটি লেনের অবস্থান
- const lanes=[-.72,-.36,0,.36,.72];
- if(traffic.length<7&&world>=nextTraffic){
-  const type=Math.random()<.35?"auto":"car";
-  const colors=["#e64b3c","#2979d8","#f0b72d","#eeeeee","#8d55c7","#19a58b"];
-  let laneChoice=lanes[Math.floor(Math.random()*lanes.length)];
-
-  // কাছাকাছি একই জায়গায় গাড়ি জমা হওয়া কমানো
-  for(let attempt=0;attempt<5;attempt++){
-   const candidate=lanes[Math.floor(Math.random()*lanes.length)];
-   const crowded=traffic.some(c=>Math.abs(c.z-(world+1000))<300&&Math.abs(c.lane-candidate)<.25);
-   if(!crowded){laneChoice=candidate;break;}
-  }
-
-  traffic.push({
-   z:world+850+Math.random()*700,
-   lane:laneChoice,
-   type,
-   color:colors[Math.floor(Math.random()*colors.length)]
-  });
-  nextTraffic=world+130+Math.random()*220;
- }
-
- const carX=road.center+lane*W*.30,carY=H*.83;
- const scale=Math.max(.75,Math.min(1.45,H/650));
-
- foods=foods.filter(f=>{
-  const q=projectObject(f,road);
-  if(!q)return f.z>world-100;
-  if(q.y>carY-35&&q.y<carY+25&&Math.abs(q.x-carX)<43*scale+q.size*.35){
-   charge=Math.min(100,charge+f.power);
-   toast(f.name+" সংগ্রহ হয়েছে! চার্জ +"+bn(f.power)+"%");
-   return false;
-  }
-  return f.z>world-100;
- });
-
- traffic=traffic.filter(car=>{
-  const q=projectObject(car,road);
-  if(!q)return car.z>world-100;
-
-  if(q.y>carY-32&&q.y<carY+25&&
-     Math.abs(q.x-carX)<(car.type==="auto"?43:39)*scale+q.size*.25){
-   if(invincible<=0){
-    hits++;
-    invincible=1;
-    speed=Math.max(0,speed*.35);
-    toast("গাড়িতে ধাক্কা! "+bn(hits)+"/৩");
-    if(hits>=3)endGame("৩ বার গাড়িতে ধাক্কা লেগেছে!");
-   }
-   return false;
-  }
-  return car.z>world-100;
- });
-
- updateHud();
- if(charge<=0&&running){
-  charge=0;
-  updateHud();
-  endGame("অটোরিকশার চার্জ শেষ!");
- }
-}
-
-function draw(){
- if(!W||!H)return;
- const road=drawRoad();
- [...traffic].sort((a,b)=>b.z-a.z).forEach(car=>drawTraffic(car,road));
- [...foods].sort((a,b)=>b.z-a.z).forEach(f=>drawFood(f,road));
-
- const x=road.center+lane*W*.30;
- if(!(invincible>0&&Math.floor(invincible*12)%2===0)){
-  drawAuto(x,H*.83,Math.max(.75,Math.min(1.45,H/650)));
- }
-}
-function loop(now){
- if(!running)return;
- const dt=Math.min((now-lastTime)/1000,.04);
- lastTime=now;
- update(dt);
- if(!running)return;
- if(toastTimer>0){
-  toastTimer-=dt;
-  if(toastTimer<=0)$("toast").style.display="none";
- }
- draw();
- requestAnimationFrame(loop);
-}
-
-resize();
-updateHud();
-draw();
+draw(performance.now());
 })();
 </script>
 </body>
