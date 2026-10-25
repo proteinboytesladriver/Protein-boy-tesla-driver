@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -14,8 +15,8 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 #chargeBox{width:100%;max-width:220px}
 #chargeTrack{height:9px;background:#555;border-radius:10px;margin-top:5px;overflow:hidden}
 #chargeFill{height:100%;width:100%;background:#41e16f}
-#musicBtn{position:absolute;top:112px;right:9px;background:#17252eee;color:white;border:1px solid #ffffff66;border-radius:10px;padding:10px;font-weight:bold}
-#hint{position:absolute;top:158px;right:9px;background:#17252ee8;padding:7px 9px;border-radius:9px;font-size:11px}
+#musicBtn{position:absolute;top:145px;right:9px;background:#17252eee;color:white;border:1px solid #ffffff66;border-radius:10px;padding:10px;font-weight:bold}
+#hint{position:absolute;top:190px;right:9px;background:#17252ee8;padding:7px 9px;border-radius:9px;font-size:11px}
 #overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#07141dcc;padding:18px}
 .panel{width:min(390px,100%);background:#142b35;border:1px solid #ffffff38;border-radius:20px;padding:21px;text-align:center}
 .panel h1{font-size:25px;margin:0 0 8px;color:#ffd54a}
@@ -26,8 +27,11 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 .ctrl{width:59px;height:59px;border-radius:50%;border:2px solid #ffffff9c;background:#122832dd;color:white;font-size:23px;font-weight:bold;touch-action:none;user-select:none}
 .ctrl.gas{background:#168548e8}
 .ctrl.brake{background:#bb3939e8}
-#toast{position:absolute;top:205px;left:50%;transform:translateX(-50%);background:#142b35ed;padding:10px 13px;border-radius:12px;font-weight:bold;display:none;text-align:center;max-width:90%;font-size:13px}
-@media(min-width:700px){#gameWrap{max-width:1000px;margin:auto}.ctrl{width:70px;height:70px}}
+#toast{position:absolute;top:238px;left:50%;transform:translateX(-50%);background:#142b35ed;padding:10px 13px;border-radius:12px;font-weight:bold;display:none;text-align:center;max-width:90%;font-size:13px}
+@media(min-width:700px){
+ #gameWrap{max-width:1000px;margin:auto}
+ .ctrl{width:70px;height:70px}
+}
 </style>
 </head>
 <body>
@@ -35,9 +39,10 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 <canvas id="game"></canvas>
 
 <div id="hud">
- <div class="stat">🛺 সিলেট টেসলা রাইড by Protein boy </div>
+ <div class="stat">🛺 সিলেট টেসলা রাইড</div>
  <div class="stat">📏 দূরত্ব: <span id="distance">০</span> মিটার</div>
  <div class="stat">⚡ গতি: <span id="speed">০</span> কিমি/ঘণ্টা</div>
+ <div class="stat">💥 ধাক্কা: <span id="hits">০</span>/৩</div>
  <div class="stat" id="chargeBox">
   🔋 চার্জ: <span id="chargeText">১০০</span>%
   <div id="chargeTrack"><div id="chargeFill"></div></div>
@@ -45,7 +50,7 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 </div>
 
 <button id="musicBtn">🎵 গান চালু</button>
-<div id="hint">সামনে থেকে আসা protein সংগ্রহ করো!</div>
+<div id="hint">🐟 খাবার সংগ্রহ করো, গাড়ি এড়িয়ে চলো!</div>
 <div id="toast"></div>
 
 <div id="controls">
@@ -63,12 +68,11 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
  <div class="panel">
   <div style="font-size:46px">🛺</div>
   <h1 id="panelTitle">সিলেট টেসলা রাইড</h1>
-  <p><b>চালক:The protein boy</b></p>
- 
-  <p id="panelMessage">সিলেটের রাস্তায় টেসলা চালাও। প্রোটিন সংগ্রহ করে চার্জ বাড়াও!</p>
-  <p>◀ ▶ ঘোরাও<br>▲ গতি বাড়াও · ▼ ব্রেক করো</p>
+  <p><b>চালক: Aiman-The protein boy</b></p>
+  <p id="panelMessage">সিলেটের রাস্তায় অটোরিকশা চালাও। খাবার সংগ্রহ করো এবং অন্য গাড়ি থেকে সাবধানে থেকো!</p>
+  <p>◀ ▶ দিক পরিবর্তন<br>▲ গতি বাড়াও · ▼ ব্রেক করো<br>৩ বার গাড়িতে ধাক্কা লাগলে গেম ওভার!</p>
   <button class="mainBtn" id="start">যাত্রা শুরু</button>
-  <p style="font-size:11px">গান চালু না হলে যাত্রা শুরুর পর গান চালু বোতামে চাপ দাও।</p>
+  <p style="font-size:11px">গান চালু না হলে গান চালু বোতামে চাপ দাও।</p>
  </div>
 </div>
 
@@ -85,7 +89,8 @@ const bn=n=>String(Math.floor(n)).replace(/\d/g,d=>"০১২৩৪৫৬৭৮�
 
 let W=0,H=0,dpr=1;
 let running=false,charge=100,distance=0,world=0,speed=0,lane=0;
-let foods=[],nextSpawn=0,lastTime=0,toastTimer=0;
+let hits=0,foods=[],traffic=[],nextSpawn=0,nextTraffic=0;
+let lastTime=0,toastTimer=0,invincible=0;
 
 const keys={left:false,right:false,go:false,brake:false};
 const foodTypes=[
@@ -114,16 +119,18 @@ function updateHud(){
  $("distance").textContent=bn(distance);
  $("speed").textContent=bn(speed);
  $("chargeText").textContent=bn(charge);
+ $("hits").textContent=bn(hits);
  $("chargeFill").style.width=charge+"%";
  $("chargeFill").style.background=charge<=20?"#ff4444":charge<=40?"#ffc83d":"#41e16f";
 }
 function resetGame(){
- charge=100;distance=0;world=0;speed=0;lane=0;
- foods=[];nextSpawn=0;toastTimer=0;
+ charge=100;distance=0;world=0;speed=0;lane=0;hits=0;
+ foods=[];traffic=[];nextSpawn=0;nextTraffic=0;
+ lastTime=0;toastTimer=0;invincible=0;
  Object.keys(keys).forEach(k=>keys[k]=false);
  $("toast").style.display="none";
- $("panelTitle").textContent="সিলেট অটোরিকশা রাইড";
- $("panelMessage").textContent="সিলেটের রাস্তায় অটোরিকশা চালাও। মাছ, মাংস, ডিম ও দুধ সংগ্রহ করে চার্জ বাড়াও!";
+ $("panelTitle").textContent="সিলেট টেসলা রাইড";
+ $("panelMessage").textContent="খাবার সংগ্রহ করো, অন্য গাড়ি এড়িয়ে চলো। ৩ বার ধাক্কা লাগলে গেম ওভার!";
  $("start").textContent="যাত্রা শুরু";
  updateHud();
 }
@@ -158,11 +165,12 @@ function startGame(){
 }
 $("start").addEventListener("click",startGame);
 
-function endGame(){
+function endGame(reason){
+ if(!running)return;
  running=false;
- $("panelTitle").textContent="যাত্রা শেষ!";
- $("panelMessage").textContent=
-  "তুমি "+bn(distance)+" মিটার পথ পাড়ি দিয়েছ। আবার চেষ্টা করো!";
+ Object.keys(keys).forEach(k=>keys[k]=false);
+ $("panelTitle").textContent="গেম ওভার!";
+ $("panelMessage").textContent=reason+" তোমার দূরত্ব: "+bn(distance)+" মিটার। আবার চেষ্টা করো!";
  $("start").textContent="আবার যাত্রা শুরু";
  $("overlay").style.display="flex";
 }
@@ -232,6 +240,7 @@ function drawRoad(){
   const x=i*W/10-W*.03,hh=20+(i*17%35);
   building(x,horizon-hh,W*.075,hh,["#e7bfa0","#d8d4b8","#d9e3e2","#d8b7a4"][i%4]);
  }
+
  ctx.fillStyle="#62b85b";ctx.fillRect(0,horizon,W,H-horizon);
  poly([[center-roadTop/2,horizon],[center+roadTop/2,horizon],[center+roadBottom/2,bottom],[center-roadBottom/2,bottom]],"#55595b");
  poly([[center-roadTop/2,horizon],[center-roadTop/2+3,horizon],[center-roadBottom/2+8,bottom],[center-roadBottom/2,bottom]],"#e9e4d4");
@@ -245,17 +254,35 @@ function drawRoad(){
   ctx.fillRect(center-rw*.17,y,Math.max(2,W*.006),dh);
   ctx.fillRect(center+rw*.17,y,Math.max(2,W*.006),dh);
  }
+
+ // রাস্তার দুই পাশে গাছ, বাড়ি ও AIMAN সাইনবোর্ড
  for(const side of [-1,1]){
-  for(let i=0;i<7;i++){
-   const p=((i/7+(world*.0007)%1)%1);
+  for(let i=0;i<8;i++){
+   const p=((i/8+(world*.0007)%1)%1);
    const y=horizon+p*p*(H-horizon);
    const rw=roadTop+(roadBottom-roadTop)*p*p;
-   const x=center+side*(rw*.5+W*.04+p*W*.11),s=10+p*38;
+   const x=center+side*(rw*.5+W*.04+p*W*.11);
+   const s=10+p*38;
+
    if(i%3===0){
-    rr(x-s*.55,y-s*.55,s*1.1,s*.8,2,"#e9d7b4");
-    ctx.fillStyle="#34734a";ctx.font=`bold ${Math.max(5,s*.19)}px Arial`;
-    ctx.textAlign="center";ctx.fillText("সিলেট",x,y-s*.2);
-   }else tree(x,y,s);
+    rr(x-s*.6,y-s*.55,s*1.2,s*.85,3,"#f4d65a");
+    ctx.strokeStyle="#704d1c";ctx.lineWidth=Math.max(1,p*2);
+    ctx.strokeRect(x-s*.6,y-s*.55,s*1.2,s*.85);
+    ctx.fillStyle="#163e2c";
+    ctx.font=`bold ${Math.max(6,s*.22)}px Arial`;
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.fillText("Aiman",x,y-s*.12);
+    ctx.fillRect(x-s*.06,y+s*.3,s*.12,s*.55);
+   }else if(i%3===1){
+    tree(x,y,s);
+   }else{
+    rr(x-s*.5,y-s*.5,s,s*.7,2,"#e9d7b4");
+    ctx.fillStyle="#34734a";
+    ctx.font=`bold ${Math.max(5,s*.19)}px Arial`;
+    ctx.textAlign="center";
+    ctx.fillText("সিলেট",x,y-s*.2);
+   }
   }
  }
  return {horizon,center,roadTop,roadBottom};
@@ -264,69 +291,88 @@ function drawRoad(){
 /* তিন চাকার বাংলাদেশি যাত্রীবাহী অটোরিকশা */
 function drawAuto(x,y,scale){
  ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
-
- // ছায়া ও পেছনের চাকা
  ctx.fillStyle="#0004";ctx.beginPath();ctx.ellipse(0,5,49,11,0,0,7);ctx.fill();
  rr(-37,-3,14,23,5,"#181818");
  rr(24,-3,14,23,5,"#181818");
-
- // অটোরিকশার খোলা সবুজ বডি
  poly([[-43,-25],[34,-25],[43,5],[-45,5]],"#148c50");
  poly([[-37,-18],[32,-18],[35,-7],[-39,-7]],"#f3c83f");
-
- // পেছনের যাত্রী বসার অংশ ও ছাউনি
  poly([[-31,-51],[24,-51],[33,-25],[-35,-25]],"#216e4a");
  rr(-34,-59,69,9,3,"#f5cf37");
  rr(-30,-56,60,4,2,"#e4f1e9");
-
- // খোলা পাশের রেলিং
  ctx.strokeStyle="#f5d24c";ctx.lineWidth=3;
  ctx.beginPath();ctx.moveTo(-32,-45);ctx.lineTo(-32,-25);
  ctx.moveTo(29,-45);ctx.lineTo(29,-25);
  ctx.moveTo(-32,-32);ctx.lineTo(30,-32);ctx.stroke();
-
- // চালকের সামনের কেবিন ও কাচ
  poly([[-25,-46],[15,-46],[25,-24],[-31,-24]],"#285d72");
  poly([[-20,-42],[-1,-42],[-1,-27],[-25,-27]],"#b8e8f5");
  poly([[3,-42],[12,-42],[20,-27],[3,-27]],"#b8e8f5");
-
- // চালক
  ctx.fillStyle="#d9a17b";ctx.beginPath();ctx.arc(0,-36,6,0,7);ctx.fill();
  ctx.fillStyle="#25313a";ctx.fillRect(-6,-30,12,6);
-
- // সামনে একটি চাকা
  ctx.save();ctx.translate(0,7);
  rr(-9,-5,18,18,6,"#171717");
  rr(-4,0,8,7,3,"#aaaaaa");
  ctx.restore();
-
- // সামনের হেডলাইট ও বাম্পার
  ctx.fillStyle="#fff0a8";ctx.fillRect(-34,-16,8,6);ctx.fillRect(27,-16,8,6);
  ctx.fillStyle="#d5d5d5";ctx.fillRect(-40,5,80,4);
-
- // চালকের নাম
  ctx.fillStyle="white";ctx.font="bold 7px Arial";ctx.textAlign="center";
  ctx.fillText("AIMAN",0,-9);
  ctx.restore();
 }
 
-function projectFood(f,road){
+/* সামনে থাকা অন্য গাড়ি আঁকা */
+function drawTrafficCar(x,y,size,type,color){
+ ctx.save();
+ ctx.translate(x,y);
+ const s=size/40;
+ ctx.scale(s,s);
+
+ if(type==="auto"){
+  rr(-19,-20,38,38,5,color);
+  poly([[-15,-19],[13,-19],[17,-7],[-16,-7]],"#a9e2ed");
+  rr(-21,12,42,5,2,"#e9c640");
+  rr(-16,15,8,9,3,"#161616");
+  rr(8,15,8,9,3,"#161616");
+  ctx.fillStyle="#fff4b0";ctx.fillRect(-18,3,5,5);ctx.fillRect(13,3,5,5);
+ }else{
+  rr(-17,-23,34,48,6,color);
+  poly([[-12,-18],[12,-18],[14,-5],[-14,-5]],"#b7e7f4");
+  poly([[-12,0],[12,0],[13,10],[-13,10]],"#76b7c9");
+  rr(-20,-15,4,10,2,"#222");
+  rr(16,-15,4,10,2,"#222");
+  rr(-15,18,7,8,2,"#191919");
+  rr(8,18,7,8,2,"#191919");
+  ctx.fillStyle="#ffdf85";ctx.fillRect(-14,19,5,3);ctx.fillRect(9,19,5,3);
+ }
+ ctx.restore();
+}
+
+function projectObject(f,road){
  const ahead=f.z-world,p=1-ahead/1050;
  if(p<0||p>1.1)return null;
  const y=road.horizon+p*p*(H-road.horizon);
  const rw=road.roadTop+(road.roadBottom-road.roadTop)*p*p;
  const x=road.center+f.lane*rw*.38;
- return {x,y,size:12+p*35};
+ return {x,y,size:12+p*35,p};
 }
 function drawFood(f,road){
- const q=projectFood(f,road);if(!q)return;
+ const q=projectObject(f,road);if(!q)return;
  ctx.save();ctx.textAlign="center";ctx.textBaseline="middle";
  ctx.font=`${q.size}px Arial`;ctx.shadowColor="#0007";ctx.shadowBlur=5;
- ctx.fillText(f.emoji,q.x,q.y);ctx.restore();
+ ctx.fillText(f.emoji,q.x,q.y);
+ ctx.shadowBlur=0;
+ ctx.font=`bold ${Math.max(10,q.size*.42)}px Arial`;
+ ctx.lineWidth=3;ctx.strokeStyle="#ffffff";
+ ctx.strokeText(f.name,q.x,q.y+q.size*.65);
+ ctx.fillStyle="#17212a";
+ ctx.fillText(f.name,q.x,q.y+q.size*.65);
+ ctx.restore();
+}
+function drawTraffic(car,road){
+ const q=projectObject(car,road);if(!q)return;
+ drawTrafficCar(q.x,q.y,q.size,car.type,car.color);
 }
 
 function update(dt){
- // আগের তুলনায় চার্জ দ্রুত কমবে
  if(keys.go)speed+=45*dt;
  else speed-=12*dt;
  if(keys.brake)speed-=65*dt;
@@ -338,30 +384,37 @@ function update(dt){
 
  world+=speed*dt*1.8;
  distance+=speed*dt*.55;
-
- // চলার সময় চার্জ দ্রুত কমে; স্থির থাকলে কমবে না
  charge=Math.max(0,charge-speed*dt*.045);
-
- // সব সময় এলোমেলো খাবার সামনে আসবে
- // একই সময়ে সর্বোচ্চ তিনটি খাবার থাকবে
- if(foods.length<3&&world>=nextSpawn){
-  const f=foodTypes[Math.floor(Math.random()*foodTypes.length)];
-  foods.push({
-   ...f,
-   z:world+1050+Math.random()*180,
-   lane:Math.random()*.95-.475
-  });
-  nextSpawn=world+280+Math.random()*380;
- }
+ invincible=Math.max(0,invincible-dt);
 
  const road={horizon:H*.39,center:W*.5,roadTop:W*.10,roadBottom:W*.94};
+
+ // এলোমেলো খাবার সামনে আসবে
+ if(foods.length<3&&world>=nextSpawn){
+  const f=foodTypes[Math.floor(Math.random()*foodTypes.length)];
+  foods.push({...f,z:world+850+Math.random()*280,lane:Math.random()*.95-.475});
+  nextSpawn=world+240+Math.random()*320;
+ }
+
+ // সামনে থেকে বিভিন্ন গাড়ি আসবে
+ if(traffic.length<5&&world>=nextTraffic){
+  const type=Math.random()<.35?"auto":"car";
+  const colors=["#e64b3c","#2979d8","#f0b72d","#eeeeee","#8d55c7","#19a58b"];
+  traffic.push({
+   z:world+850+Math.random()*550,
+   lane:([-0.42,0,0.42][Math.floor(Math.random()*3)]),
+   type,
+   color:colors[Math.floor(Math.random()*colors.length)]
+  });
+  nextTraffic=world+170+Math.random()*260;
+ }
+
  const carX=road.center+lane*W*.30,carY=H*.83;
  const scale=Math.max(.75,Math.min(1.45,H/650));
 
  foods=foods.filter(f=>{
-  const q=projectFood(f,road);
+  const q=projectObject(f,road);
   if(!q)return f.z>world-100;
-
   if(q.y>carY-35&&q.y<carY+25&&
      Math.abs(q.x-carX)<43*scale+q.size*.35){
    charge=Math.min(100,charge+f.power);
@@ -371,16 +424,49 @@ function update(dt){
   return f.z>world-100;
  });
 
+ // গাড়ির সঙ্গে সংঘর্ষ: তিনবার হলে গেম ওভার
+ traffic=traffic.filter(car=>{
+  const q=projectObject(car,road);
+  if(!q)return car.z>world-100;
+
+  if(q.y>carY-32&&q.y<carY+25&&
+     Math.abs(q.x-carX)<(car.type==="auto"?43:39)*scale+q.size*.25){
+   if(invincible<=0){
+    hits++;
+    invincible=1.0;
+    speed=Math.max(0,speed*.35);
+    toast("গাড়িতে ধাক্কা! "+bn(hits)+"/৩");
+    updateHud();
+
+    if(hits>=3){
+     endGame("পরপর ৩ বার গাড়িতে ধাক্কা লেগেছে!");
+    }
+   }
+   return false;
+  }
+  return car.z>world-100;
+ });
+
  updateHud();
- if(charge<=0){charge=0;updateHud();endGame();}
+ if(charge<=0&&running){
+  charge=0;updateHud();
+  endGame("অটোরিকশার চার্জ শেষ!");
+ }
 }
 
 function draw(){
  if(!W||!H)return;
  const road=drawRoad();
+
+ [...traffic].sort((a,b)=>b.z-a.z).forEach(car=>drawTraffic(car,road));
  [...foods].sort((a,b)=>b.z-a.z).forEach(f=>drawFood(f,road));
+
  const x=road.center+lane*W*.30;
- drawAuto(x,H*.83,Math.max(.75,Math.min(1.45,H/650)));
+ if(invincible>0&&Math.floor(invincible*12)%2===0){
+  // ধাক্কার পর অল্প সময় গাড়ি ঝলকাবে
+ }else{
+  drawAuto(x,H*.83,Math.max(.75,Math.min(1.45,H/650)));
+ }
  ctx.textAlign="center";ctx.font="bold 12px Arial";
  ctx.fillStyle="white";ctx.strokeStyle="#16252c";ctx.lineWidth=3;
  ctx.strokeText("Aiman-The protein boy",x,H*.83+45);
