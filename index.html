@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Aiman - The Protein Boy | Sylhet Auto Ride</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;overflow:hidden;font-family:Arial,"Noto Sans Bengali",sans-serif;background:#9bd4e5;touch-action:none}
+canvas{display:block;width:100vw;height:100dvh}
+#hud{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;color:white;pointer-events:none}
+.panel{background:#092b28e8;border-radius:12px;padding:10px;font-size:13px;line-height:1.6}
+strong{color:#fde047}
+#chargebar{height:7px;background:#ffffff55;border-radius:9px;overflow:hidden;width:100px}
+#chargefill{height:100%;width:100%;background:#a3e635}
+#hint{position:fixed;top:83px;left:50%;transform:translateX(-50%);background:#092b28e8;color:white;border-radius:10px;padding:9px 12px;font-size:13px;text-align:center;max-width:94%;white-space:nowrap}
+#controls{position:fixed;bottom:18px;left:0;right:0;display:flex;justify-content:space-between;padding:0 15px}
+.group{display:flex;gap:9px}
+button{border:2px solid #ffffffaa;background:#092b28e8;color:white;border-radius:17px;width:62px;height:62px;font-size:25px;font-weight:bold;touch-action:none}
+button:active{background:#0d9488;transform:scale(.96)}
+#overlay{position:fixed;inset:0;background:#062e24c9;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fffdf1;color:#17332c;padding:24px;border-radius:22px;text-align:center;width:min(420px,100%)}
+.card h1{margin:6px 0}
+.card p{line-height:1.6;font-size:14px}
+#start{width:100%;height:auto;padding:14px;background:#087f55;border:0;font-size:17px}
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="hud">
+  <div class="panel">
+    🛺 SYLHET AUTO RIDE<br>
+    চালক: <strong>Aiman-The protein boy</strong><br>
+    দূরত্ব: <strong id="distance">0</strong> মিটার
+  </div>
+  <div class="panel">
+    গতি: <strong id="speed">0</strong><br>
+    ⚡ চার্জ: <strong id="charge">100%</strong>
+    <div id="chargebar"><div id="chargefill"></div></div>
+  </div>
+</div>
+
+<div id="hint">🐟 খাবার সংগ্রহ করো, অটোর চার্জ বাড়াও!</div>
+
+<div id="controls">
+  <div class="group">
+    <button id="left">◀</button>
+    <button id="right">▶</button>
+  </div>
+  <div class="group">
+    <button id="brake">■</button>
+    <button id="go">▲</button>
+  </div>
+</div>
+
+<div id="overlay">
+  <div class="card">
+    <div style="font-size:60px">🛺</div>
+    <h1>Sylhet Auto Ride</h1>
+    <h3>Aiman-The protein boy</h3>
+    <p>সিলেট শহরের রাস্তায় অটো চালাও। মাছ, মাংস, ডিম ও দুধ সংগ্রহ করে চার্জ বাড়াও। চার্জ শেষ হলে অটো থেমে যাবে!</p>
+    <button id="start">গেম শুরু করো</button>
+  </div>
+</div>
+
+<script>
+(()=>{
+"use strict";
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+const $=id=>document.getElementById(id);
+
+let W,H,DPR,started=false,last=0;
+let world=0,distance=0,speed=0,charge=100;
+let playerX=0,nextFood=450,foods=[];
+const keys={left:false,right:false,go:false,brake:false};
+
+const foodTypes=[
+ {emoji:"🐟",name:"মাছ",gain:18},
+ {emoji:"🍗",name:"মাংস",gain:20},
+ {emoji:"🥚",name:"ডিম",gain:14},
+ {emoji:"🥛",name:"দুধ",gain:16}
+];
+
+function resize(){
+ DPR=Math.min(devicePixelRatio||1,2);
+ W=innerWidth;H=innerHeight;
+ canvas.width=W*DPR;canvas.height=H*DPR;
+ ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+addEventListener("resize",resize);resize();
+
+function rr(x,y,w,h,r,color,stroke){
+ ctx.beginPath();ctx.roundRect(x,y,w,h,r);
+ ctx.fillStyle=color;ctx.fill();
+ if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}
+}
+
+function roadAt(y){
+ const horizon=H*.27;
+ const p=Math.max(0,Math.min(1,(y-horizon)/(H-horizon)));
+ const center=W/2+Math.sin(world*.0008+(1-p)*2)*W*.1*(1-p);
+ const half=W*(.12+.32*p);
+ return {center,left:center-half,right:center+half,p};
+}
+
+function building(x,y,w,h,n){
+ const colors=["#f3d5a1","#e9bba0","#c9dfcf","#d0dff0","#f0e7c6"];
+ ctx.fillStyle=colors[n%colors.length];
+ ctx.fillRect(x,y,w,h);
+ ctx.fillStyle="#ae6946";ctx.fillRect(x,y+h*.72,w,h*.12);
+ const cols=Math.max(1,Math.floor(w/22));
+ for(let r=0;r<Math.max(1,Math.floor(h/25));r++){
+  for(let c=0;c<cols;c++){
+   ctx.fillStyle=(r+c)%3?"#75aab4":"#fff0b5";
+   ctx.fillRect(x+4+c*w/cols,y+5+r*23,Math.min(11,w/cols-5),10);
+  }
+ }
+ ctx.fillStyle="#fff";ctx.font="bold 9px sans-serif";
+ ctx.textAlign="center";ctx.fillText(n%2?"চা ঘর":"দোকান",x+w/2,y+h*.66);
+}
+
+function tree(x,y,s){
+ ctx.fillStyle="#795337";ctx.fillRect(x-s*.08,y,s*.16,s*.4);
+ ctx.fillStyle="#287749";
+ ctx.beginPath();ctx.arc(x,y-s*.12,s*.32,0,7);ctx.fill();
+ ctx.fillStyle="#3b9456";
+ ctx.beginPath();ctx.arc(x-s*.12,y-s*.2,s*.2,0,7);ctx.fill();
+}
+
+function drawRoad(){
+ const horizon=H*.27;
+ let sky=ctx.createLinearGradient(0,0,0,H*.5);
+ sky.addColorStop(0,"#73c6e8");sky.addColorStop(1,"#e7f1c9");
+ ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+
+ ctx.fillStyle="#5da66c";
+ ctx.beginPath();ctx.moveTo(0,horizon+35);
+ for(let x=0;x<=W+20;x+=20)
+  ctx.lineTo(x,horizon+Math.sin(x*.014)*13);
+ ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();
+
+ const offset=(world*.34)%135;
+ for(let i=-1;i<Math.ceil(H/135)+1;i++){
+  const y=horizon+i*135+offset;
+  if(y<horizon-90||y>H+60)continue;
+  const p=Math.max(.1,Math.min(1,(y-horizon)/(H-horizon)));
+  const r=roadAt(y),s=.35+p*.75;
+  building(r.left-95*s-12,y-72*s,66*s,78*s,Math.abs(i*3+2)%5);
+  building(r.right+25*s,y-65*s,68*s,72*s,Math.abs(i*5+1)%5);
+  tree(r.left-18*s,y,17*s);
+  tree(r.right+18*s,y+15,17*s);
+ }
+
+ const a=roadAt(horizon),b=roadAt(H+30);
+ ctx.fillStyle="#484e52";
+ ctx.beginPath();ctx.moveTo(a.left,horizon);ctx.lineTo(a.right,horizon);
+ ctx.lineTo(b.right,H+30);ctx.lineTo(b.left,H+30);ctx.closePath();ctx.fill();
+
+ ctx.strokeStyle="#f8e9c0";ctx.lineWidth=3;
+ ctx.beginPath();ctx.moveTo(a.left,horizon);ctx.lineTo(b.left,H);
+ ctx.moveTo(a.right,horizon);ctx.lineTo(b.right,H);ctx.stroke();
+
+ for(let i=0;i<12;i++){
+  const y=horizon+((i*90+world*.7)%Math.max(1,H-horizon));
+  const r=roadAt(y),p=r.p;
+  ctx.fillStyle="#f6e6a4";
+  ctx.fillRect(r.center-(2+p*2)/2,y,2+p*2,5+p*23);
+ }
+
+ const sy=horizon+(world*.23)%450;
+ if(sy>horizon+30&&sy<H-40){
+  const r=roadAt(sy),x=r.right+22;
+  ctx.fillStyle="#555";ctx.fillRect(x,sy,3,35);
+  rr(x-20,sy-23,75,27,4,"#087b54");
+  ctx.fillStyle="white";ctx.font="bold 11px sans-serif";
+  ctx.textAlign="center";ctx.fillText("সিলেট শহর",x+17,sy-6);
+ }
+}
+
+function drawAuto(x,y,scale){
+ ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+ ctx.fillStyle="#0003";ctx.beginPath();ctx.ellipse(0,5,27,39,0,0,7);ctx.fill();
+ for(const wx of [-24,16])for(const wy of [-26,15])
+  rr(wx,wy,8,19,3,"#202326");
+ rr(-22,-37,44,74,8,"#078052","#064e3b");
+ rr(-20,-31,40,34,7,"#f5c842","#a77c13");
+ rr(-15,-26,30,18,4,"#a9e0e5","#345e60");
+ ctx.strokeStyle="#f8e6a4";ctx.lineWidth=2;
+ ctx.beginPath();ctx.moveTo(0,-26);ctx.lineTo(0,-8);ctx.stroke();
+ rr(-15,1,30,23,4,"#145a42","#a5d6b7");
+ ctx.fillStyle="#facc15";ctx.fillRect(-19,27,38,5);
+ ctx.fillStyle="#fff6b0";ctx.fillRect(-16,-37,8,4);ctx.fillRect(8,-37,8,4);
+ ctx.fillStyle="#e11d48";ctx.fillRect(-5,-42,10,5);
+ ctx.restore();
+}
+
+function drawFoods(){
+ for(const f of foods){
+  if(f.got)continue;
+  const y=H*.27+(f.z-world)*.5;
+  if(y<H*.27-20||y>H+25)continue;
+  const r=roadAt(y),x=r.center+f.lane*(r.right-r.left)*.42;
+  const size=Math.max(14,Math.min(28,12+r.p*16));
+  ctx.beginPath();ctx.arc(x,y,size,0,Math.PI*2);
+  ctx.fillStyle="#fffdf2";ctx.fill();
+  ctx.strokeStyle="#eab308";ctx.lineWidth=2;ctx.stroke();
+  ctx.font=size*1.35+"px sans-serif";
+  ctx.textAlign="center";ctx.textBaseline="middle";
+  ctx.fillText(f.type.emoji,x,y+1);
+ }
+}
+
+function update(dt){
+ if(!started)return;
+ if(keys.go&&charge>0)speed+=155*dt;
+ if(keys.brake)speed-=260*dt;
+ else speed-=35*dt;
+ if(charge<=0)speed-=100*dt;
+ speed=Math.max(0,Math.min(190,speed));
+
+ playerX+=(keys.left?-1:keys.right?1:0)*(120+speed*.65)*dt;
+ playerX=Math.max(-W*.29,Math.min(W*.29,playerX));
+
+ world+=speed*dt*4.3;
+ distance+=speed*dt*.025;
+ if(speed>0)charge=Math.max(0,charge-speed*dt*.012);
+
+ while(nextFood<world+1500){
+  foods.push({
+   z:nextFood,
+   lane:(Math.random()-.5)*1.3,
+   type:foodTypes[Math.floor(Math.random()*foodTypes.length)],
+   got:false
+  });
+  nextFood+=280+Math.random()*170;
+ }
+
+ const px=W/2+playerX,py=H*.75;
+ for(const f of foods){
+  if(f.got)continue;
+  const fy=H*.27+(f.z-world)*.5;
+  if(fy>py-25&&fy<py+28){
+   const r=roadAt(fy);
+   const fx=r.center+f.lane*(r.right-r.left)*.42;
+   if(Math.abs(fx-px)<43){
+    f.got=true;
+    charge=Math.min(100,charge+f.type.gain);
+    $("hint").textContent=f.type.emoji+" "+f.type.name+"! চার্জ +"+f.type.gain+"%";
+    $("hint").style.display="block";
+    clearTimeout(window.hintTimer);
+    window.hintTimer=setTimeout(()=>$("hint").style.display="none",1600);
+   }
+  }
+ }
+ foods=foods.filter(f=>!f.got&&f.z>world-100);
+ $("distance").textContent=Math.floor(distance);
+ $("speed").textContent=Math.round(speed/2);
+ $("charge").textContent=Math.round(charge)+"%";
+ $("chargefill").style.width=charge+"%";
+ $("chargefill").style.background=charge<25?"#fb7185":charge<50?"#facc15":"#a3e635";
+}
+
+function draw(){
+ drawRoad();drawFoods();
+ drawAuto(W/2+playerX,H*.75,Math.max(.72,Math.min(1.12,Math.min(W/420,H/760))));
+}
+
+function loop(t){
+ const dt=Math.min((t-last)/1000||0,.04);
+ last=t;update(dt);draw();requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+for(const [id,key] of [["left","left"],["right","right"],["go","go"],["brake","brake"]]){
+ const b=$(id);
+ b.addEventListener("pointerdown",e=>{e.preventDefault();keys[key]=true;b.setPointerCapture(e.pointerId)});
+ for(const ev of ["pointerup","pointercancel","lostpointercapture"])
+  b.addEventListener(ev,e=>{e.preventDefault();keys[key]=false});
+}
+
+addEventListener("keydown",e=>{
+ if(e.key==="ArrowLeft")keys.left=true;
+ if(e.key==="ArrowRight")keys.right=true;
+ if(e.key==="ArrowUp")keys.go=true;
+ if(e.key==="ArrowDown"||e.key===" ")keys.brake=true;
+});
+addEventListener("keyup",e=>{
+ if(e.key==="ArrowLeft")keys.left=false;
+ if(e.key==="ArrowRight")keys.right=false;
+ if(e.key==="ArrowUp")keys.go=false;
+ if(e.key==="ArrowDown"||e.key===" ")keys.brake=false;
+});
+
+$("start").addEventListener("click",()=>{
+ started=true;$("overlay").style.display="none";
+ $("hint").textContent="🐟 মাছ · 🍗 মাংস · 🥚 ডিম · 🥛 দুধ সংগ্রহ করো!";
+});
+})();
+</script>
+</body>
+</html>
